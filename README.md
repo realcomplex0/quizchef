@@ -2,4 +2,7 @@
 
 An interactive online multiplayer quiz game
 
-Made by: Matīss Kristiņš, Kristaps Štāls 
+## List of developers
+
+1. Kristaps Štāls
+1. Matīss Kristiņš
