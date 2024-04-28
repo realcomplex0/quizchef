@@ -10,7 +10,7 @@
 
         <!-- About Us -->
         <button class="absolute left-1/2 anchor-center" style="top:95%;height:10%;width:10%">
-            <p class="absolute anchor-center top-1/2 left-1/2 text-white text-nowrap text-xl">About Us</p>
+            <p class="absolute anchor-center top-1/2 left-1/2 text-white text-nowrap text-xl select-none">About Us</p>
         </button>
 
         <!-- Login/register box -->
