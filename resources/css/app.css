@@ -1,3 +1,50 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Store global css variables here */
+:root { 
+    --main-bg-color: #111014;
+    --main-bg-color-light: #3d3a45;
+}
+
+html {
+    background-color: var(--main-bg-color);
+    margin: 0;
+    height: 100%;
+    overflow: hidden
+}
+
+/* doesnt work when using multiple translates on one element */
+.anchor-center {
+    transform: translate(-50%, -50%);
+}
+
+.bg-light {
+    background-color: var(--main-bg-color-light);
+}
+
+.btn-green {
+    @apply bg-green-500 text-white rounded-md;
+}
+.btn-green:hover {
+    @apply bg-green-700;
+}
+
+.btn-blue {
+    @apply bg-blue-500 text-white rounded-md;
+}
+.btn-blue:hover {
+    @apply bg-blue-700;
+}
+
+.btn-red {
+    @apply bg-red-500 text-white rounded-md;
+}
+.btn-red:hover {
+    @apply bg-red-700;
+}
+
+.landing-page-btn {
+    @apply anchor-center left-1/2 text-3xl transition border text-nowrap
+}
