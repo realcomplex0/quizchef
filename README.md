@@ -45,3 +45,24 @@ Deleting the containers:
 ```
 
 The app should be in: [http://localhost](http://localhost)
+
+
+## Laravel routing
+
+To view the list of routes:
+
+```
+php artisan route:list
+```
+
+To cache the newest list of routes (it might be necessary to restart vite server)
+
+```
+php artisan route:cache
+```
+
+To clear the list of routes
+
+```
+php artisan route:clear
+```

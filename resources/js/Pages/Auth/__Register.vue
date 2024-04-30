@@ -16,16 +16,21 @@ export default {
         submit() {
             this.form.post(route('_register'))
         }
+    },
+    components: {
+        Link
     }
 }
-
 </script>
 
 <template>
+    
     <div>
         <div class="flex flex-col items-center justify-center p-4 w-full">
             <p class="text-6xl text-white font-bold select-none">
-                QuizChef
+                <Link href='/'>
+                    Quizchef
+                </Link>
             </p>
             <form @submit.prevent="submit" class="flex flex-col border-2 rounded-lg w-5/12 bg-light p-10 mt-8">
                 <label for="email" class="text-white">
