@@ -21,6 +21,14 @@ Route::get('/_register', function () {
 
 Route::post('/_register', [RegisterUserController::class, 'store']);
 
+Route::get('/_login', function () {
+    return Inertia::render('Auth/__Login');
+})->name('_login');
+
+Route::post('/_login', function () {
+    return Inertia::render('LandingPage'); // TODO
+});
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

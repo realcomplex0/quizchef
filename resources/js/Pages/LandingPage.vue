@@ -22,7 +22,7 @@
             
             <!-- Login Button -->
             <Link
-                :href="route('login')"
+                :href="route('_login')"
                 class="btn-green absolute landing-page-btn" style="top:35%;height:20%;width:75%"
             >
                 <p class="absolute anchor-center top-1/2 left-1/2">Log In</p>
