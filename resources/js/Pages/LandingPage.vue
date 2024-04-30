@@ -32,8 +32,7 @@
 
             <!-- Register Button -->
             <Link
-                v-if="canRegister"
-                :href="route('register')"
+                :href="route('_register')"
                 class="btn-blue absolute landing-page-btn" style="top:75%;height:20%;width:75%"
             >
                 <p class="absolute anchor-center top-1/2 left-1/2">Register</p>

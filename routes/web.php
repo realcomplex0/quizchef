@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RegisterUserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -12,7 +13,13 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('/');
+
+Route::get('/_register', function () {
+    return Inertia::render('Auth/__Register');
+})->name('_register');
+
+Route::post('/_register', [RegisterUserController::class, 'store']);
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
