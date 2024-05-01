@@ -9,9 +9,20 @@
         </button>
 
         <!-- About Us -->
-        <button class="absolute left-1/2 anchor-center" style="top:95%;height:10%;width:10%">
-            <p class="absolute anchor-center top-1/2 left-1/2 text-white text-nowrap text-xl select-none">About Us</p>
-        </button>
+        <div class="absolute w-1/2 about-us-closed about-us-transition left-1/4 pointer-events-none" style="height:35%" :class="{'about-us-open':aboutUsOpen}">
+            <button @click="aboutUsOpen=!aboutUsOpen" class="absolute pointer-events-auto" style="height:28.5%;width:20%;left:40%">
+                <p class="absolute anchor-center top-1/2 left-1/2 text-white text-nowrap text-xl select-none">About Us</p>
+            </button>
+            <div class="absolute bg-light border-2 rounded-lg w-full pointer-events-auto" style="height:71.5%;top:28.5%">
+                <p class="absolute text-white left-1/2 anchor-center" style="top:40%;width:90%">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+            </div>
+        </div>
 
         <!-- Login/register box -->
         <div v-if="canLogin" class="absolute w-1/5 h-1/2 bg-light border-2 rounded-lg anchor-center" style="left:30%;top:50%">
@@ -82,7 +93,13 @@ export default {
             type: String,
             required: true,
         },
-    }
+    },
+
+    data (){
+        return {
+            aboutUsOpen: false,
+        }
+    },
 }
 </script>
 

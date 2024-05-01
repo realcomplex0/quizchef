@@ -1,0 +1,8 @@
+/* About us transition */
+.about-us-closed {top:90%;}
+.about-us-open {top:70%;}
+.about-us-transition {
+    transition:top 0.5s;
+}
+
+/*  */
