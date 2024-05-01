@@ -20,31 +20,39 @@ html {
     transform: translate(-50%, -50%);
 }
 
+/* absolute text centering */
+.text-mid {
+    @apply absolute anchor-center top-1/2 left-1/2
+}
+
+.bg-dark {
+    background-color: var(--main-bg-color);
+}
 .bg-light {
     background-color: var(--main-bg-color-light);
 }
 
 .btn-green {
-    @apply bg-green-500 text-white rounded-md;
+    @apply bg-green-500 text-white rounded-md transition;
 }
 .btn-green:hover {
     @apply bg-green-700;
 }
 
 .btn-blue {
-    @apply bg-blue-500 text-white rounded-md;
+    @apply bg-blue-500 text-white rounded-md transition;
 }
 .btn-blue:hover {
     @apply bg-blue-700;
 }
 
 .btn-red {
-    @apply bg-red-500 text-white rounded-md;
+    @apply bg-red-500 text-white rounded-md transition;
 }
 .btn-red:hover {
     @apply bg-red-700;
 }
 
 .landing-page-btn {
-    @apply anchor-center left-1/2 text-3xl transition border text-nowrap select-none
+    @apply anchor-center left-1/2 text-3xl border text-nowrap select-none
 }
