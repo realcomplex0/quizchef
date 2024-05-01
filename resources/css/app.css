@@ -54,5 +54,5 @@ html {
 }
 
 .landing-page-btn {
-    @apply anchor-center left-1/2 text-3xl border text-nowrap select-none
+    @apply anchor-center left-1/2 text-3xl border-2 text-nowrap select-none
 }

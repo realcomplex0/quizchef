@@ -40,7 +40,7 @@ export default {
                 <input type="password" id="password" v-model="form.password" class="bg-light text-white border-white border-2 rounded-lg"/>
                 <div class="mt-10 flex flex-row items-center justify-between">
                     <p class="text-white">Forgot password?</p>
-                    <button type="submit" class="bg-green-500 w-44 h-10 text-white border-2 rounded-lg">
+                    <button type="submit" class="btn-green w-44 h-10 text-white border-2">
                         Log In
                     </button>
                 </div>

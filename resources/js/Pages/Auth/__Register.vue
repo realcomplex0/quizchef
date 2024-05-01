@@ -54,7 +54,7 @@ export default {
                         <input id="data" class="bg-light h-7 w-7 border-white border-2 rounded-lg" type="checkbox" />
                         <label for="data" class="text-white"> I agree to share my data with China</label>
                     </div>
-                    <button type="submit" class="bg-green-500 w-44 h-10 text-white border-2 rounded-lg">
+                    <button type="submit" class="btn-green w-44 h-10 text-white border-2">
                         Register
                     </button>
                 </div>

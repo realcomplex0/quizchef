@@ -11,12 +11,12 @@
             <!-- Main Section -->
             <div class="absolute bg-light border-2 rounded-lg left-1/2 top-1/2 anchor-center text-white" style="height:90%;width:55%">
                 <!-- close button -->
-                <button @click="close" class="absolute w-16 h-16 right-4 top-4 btn-red">
+                <button @click="close" class="absolute w-16 h-16 right-4 top-4 btn-red border-2">
                     <p class="text-mid text-4xl select-none font-extrabold">X</p>
                 </button>
 
                 <!-- Title -->
-                <div class="absolute h-24 w-full pointer-events-none">
+                <div class="absolute h-24 w-full pointer-events-none border-b ">
                     <p class="text-mid text-4xl font-bold">Settings</p>
                 </div>
 
