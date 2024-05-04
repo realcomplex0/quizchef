@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterUserController;
+use App\Http\Controllers\QuizListController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
 
 Route::get('/', function () {
     return Inertia::render('LandingPage', [
@@ -15,23 +17,9 @@ Route::get('/', function () {
     ]);
 })->name('/');
 
-Route::get('/_register', function () {
-    return Inertia::render('Auth/__Register');
-})->name('_register');
+Route::get('/dashboard', [QuizListController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::post('/_register', [RegisterUserController::class, 'store']);
-
-Route::get('/_login', function () {
-    return Inertia::render('Auth/__Login');
-})->name('_login');
-
-Route::post('/_login', function () {
-    return Inertia::render('LandingPage'); // TODO
-});
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -34,7 +34,7 @@
             
             <!-- Login Button -->
             <Link
-                :href="route('_login')"
+                :href="route('login')"
                 class="btn-green absolute landing-page-btn" style="top:35%;height:20%;width:75%"
             >
                 <p class="text-mid">Log In</p>
@@ -44,7 +44,7 @@
 
             <!-- Register Button -->
             <Link
-                :href="route('_register')"
+                :href="route('register')"
                 class="btn-blue absolute landing-page-btn" style="top:75%;height:20%;width:75%"
             >
                 <p class="text-mid">Register</p>

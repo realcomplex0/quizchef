@@ -12,7 +12,7 @@ export default {
     },
     methods: {
         submit() {
-            this.form.post(route('_login'))
+            this.form.post(route('login'))
         }
     },
     components: {
