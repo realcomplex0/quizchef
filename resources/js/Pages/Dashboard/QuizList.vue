@@ -46,7 +46,7 @@ export default {
                         <p class="text-white text-xl ">Search _____________________ </p>
                     </div>
                 </div>
-                <div class="overflow-y-auto max-h-[500px]">
+                <div class="overflow-y-auto max-h-[70%]">
                     <QuizBar v-for="quiz in quizzes" :key="quiz.id" :quiz="quiz"/>
                 </div>
             </div>
