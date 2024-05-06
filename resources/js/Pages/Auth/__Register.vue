@@ -55,7 +55,7 @@ export default {
                         <label for="data" class="text-white"> I agree to share my data with China</label>
                     </div>
                     <button type="submit" class="btn-green w-44 h-10 text-white border-2">
-                        Register
+                        {{ $global.lang.generic.register }}
                     </button>
                 </div>
             </form>

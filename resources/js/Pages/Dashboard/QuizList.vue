@@ -18,17 +18,17 @@ export default {
 <template>
     <div class="absolute w-full h-full">
         <div class="flex flex-col w-full h-full">
-            <div class="p-6 flex space-between items-center justify-between">
+            <div class="p-6 bg-light flex space-between items-center justify-between">
                 <p class="text-5xl text-white font-bold select-none">
                     <Link href='/'>
                         QuizChef
                     </Link>
                 </p>
                 <div class="flex flex-row items-center">
-                    <p class="text-red-700">
+                    <p class="text-white underline">
                         {{ $page.props.auth.user.username }}
                     </p>
-                    <button type="submit" class="ml-4 btn-blue w-16 h-10 text-white border-2">
+                    <button type="submit" class="ml-4 btn-red w-16 h-10 text-white border-2">
                         <Link 
                             :href="route('logout')" 
                             method="post"
@@ -39,7 +39,7 @@ export default {
                     </button>
                 </div>
             </div>
-            <div class="p-6 flex flex-col bg-light h-full border-t-2 border-white">
+            <div class="p-6 flex flex-col h-full border-t-2 border-white">
                 <div class="flex flex-row items-center">
                     <p class="text-xl text-white">My quizzes</p>
                     <div class="pl-7">

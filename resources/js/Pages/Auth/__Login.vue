@@ -41,7 +41,7 @@ export default {
                 <div class="mt-10 flex flex-row items-center justify-between">
                     <p class="text-white">Forgot password?</p>
                     <button type="submit" class="btn-green w-44 h-10 text-white border-2">
-                        Log In
+                        {{ $global.lang.generic.logIn }}
                     </button>
                 </div>
             </form>

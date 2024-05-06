@@ -17,10 +17,12 @@
 
                 <!-- Title -->
                 <div class="absolute h-24 w-full pointer-events-none border-b ">
-                    <p class="text-mid text-4xl font-bold">Settings</p>
+                    <p class="text-mid text-4xl font-bold">{{ $global.lang.settingsModal.settings }}</p>
                 </div>
 
                 <!-- TODO: Main Section Main Section :) -->
+                <button @click="$global.settings.language = 'lv'" class="btn-green p-10">lv</button>
+                <button @click="$global.settings.language = 'en'" class="btn-green p-10">en</button>
             </div>
         </div>
     </Transition>
