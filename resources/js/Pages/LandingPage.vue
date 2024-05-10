@@ -51,24 +51,26 @@
         <!-- Join room box -->
         <div class="absolute w-1/5 h-1/2 bg-light border-2 rounded-lg anchor-center" style="left:70%;top:50%">
             <!-- Title -->
-            <div class="absolute left-1/2 anchor-center" style="top:10%">
+            <!-- <div class="absolute left-1/2 anchor-center" style="top:10%">
                 <p class="absolute text-2xl text-white font-bold anchor-center left-1/2 top-1/2 select-none text-nowrap">{{ $global.lang.landingPage.ifYourePlaying }}</p>
-            </div>
+            </div> -->
 
             <!-- TODO: room code text box -->
 
             <!-- Go to room button "Cook" -->
-            <Link
+            <input id="code" placeholder="Code" v-model="join_code" class="absolute bg-light text-white border-white border-2 landing-page-btn rounded-lg" style="top:15%;height:20%;width:75%"/>
+            <input id="code" placeholder="Name" v-model="join_name" class="absolute bg-light text-white border-white border-2 landing-page-btn rounded-lg" style="top:40%;height:20%;width:75%"/>
+            <button @click="joinGame"
                 class="btn-green absolute landing-page-btn" style="top:75%;height:20%;width:75%"
             >
                 <p class="text-mid">{{ $global.lang.landingPage.cook }}! 👨‍🍳</p>
-            </Link>
+            </button>
         </div>
     </div>
 </template>
 
 <script>
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import SettingsModal from '../Components/Settings/SettingsModal.vue';
 
 export default {
@@ -96,11 +98,23 @@ export default {
 
     data (){
         return {
+            join_code: '',
+            join_name: '',
             aboutUsOpen: false,
             settingsOpen: false,
         }
     },
 
+    methods: {
+        joinGame() {
+            console.log(this.join_code)
+            console.log(this.join_name)
+            router.post('/join-lobby', {
+                code : this.join_code,
+                name: this.join_name
+            })
+        }
+    }
     // mounted(){
     //     console.log(this.$global);
     // }

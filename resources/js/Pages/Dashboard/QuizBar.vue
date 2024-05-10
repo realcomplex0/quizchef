@@ -1,8 +1,19 @@
 <script>
+
+import { router } from '@inertiajs/vue3'
+
 export default {
     props: {
         quiz: {
             type: Object
+        }
+    },
+    methods: {
+        startGame() {
+            console.log('call function', this.quiz)
+            router.post('/create-lobby', {
+                id : this.quiz.id
+            })
         }
     }
 }
@@ -16,7 +27,7 @@ export default {
             <p class="text-white text-xl"> {{quiz.plays}} plays</p>
         </div>
         <div>
-            <button type="submit" class="mr-4 btn-green w-20 h-10 text-white border-2">
+            <button @click="startGame" class="mr-4 btn-green w-20 h-10 text-white border-2">
                 Play
             </button>
             <button type="submit" class="mr-8 btn-red w-20 h-10 text-white border-2">

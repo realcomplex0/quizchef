@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\QuizListController;
+use App\Http\Controllers\LobbyController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -19,6 +20,14 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [QuizListController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/lobby', [LobbyController::class, 'host'])->name('lobby.host');
+
+Route::post('/create-lobby', [LobbyController::class, 'create'])->name('create-lobby');
+
+Route::post('/join-lobby', [LobbyController::class, 'join'])->name('join-lobby');
+
+Route::post('/lobby', [LobbyController::class, 'play'])->name('lobby.play');
 
 
 Route::middleware('auth')->group(function () {
