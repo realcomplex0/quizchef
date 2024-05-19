@@ -13,6 +13,7 @@ Route::get('/', function () {
     return Inertia::render('LandingPage', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
+        'isLoggedIn' => Auth::check(),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);

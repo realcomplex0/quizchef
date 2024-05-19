@@ -10,7 +10,6 @@ export default {
     },
     methods: {
         startGame() {
-            console.log('call function', this.quiz)
             router.post('/create-lobby', {
                 id : this.quiz.id
             })

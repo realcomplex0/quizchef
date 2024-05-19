@@ -22,7 +22,7 @@
         </div>
 
         <!-- Login/register box -->
-        <div v-if="canLogin" class="absolute w-1/5 h-1/2 bg-light border-2 rounded-lg anchor-center" style="left:30%;top:50%">
+        <div v-if="!isLoggedIn" class="absolute w-1/5 h-1/2 bg-light border-2 rounded-lg anchor-center" style="left:30%;top:50%">
             <!-- Title -->
             <div class="absolute left-1/2 anchor-center" style="top:10%">
                 <p class="absolute text-2xl text-white font-bold anchor-center left-1/2 top-1/2 select-none text-nowrap">{{ $global.lang.landingPage.ifYoureHosting }}</p>
@@ -46,7 +46,20 @@
                 <p class="text-mid">{{ $global.lang.generic.register }}</p>
             </Link>
         </div>
-        <div v-else class="text-white">canLogin == false; implement a thing that takes you to dashboard</div>
+        <div v-else class="absolute w-1/5 h-1/2 bg-light border-2 rounded-lg anchor-center" style="left:30%;top:50%">
+            <!-- Title -->
+            <div class="absolute left-1/2 anchor-center" style="top:10%">
+                <p class="absolute text-2xl text-white font-bold anchor-center left-1/2 top-1/2 select-none text-nowrap">{{ $global.lang.landingPage.ifYoureHosting }}</p>
+            </div>
+            
+            <!-- Login Button -->
+            <Link
+                :href="route('login')"
+                class="btn-green absolute landing-page-btn" style="top:35%;height:20%;width:75%"
+            >
+                <p class="text-mid"> Dashboard </p>
+            </Link>
+        </div>
 
         <!-- Join room box -->
         <div class="absolute w-1/5 h-1/2 bg-light border-2 rounded-lg anchor-center" style="left:70%;top:50%">
@@ -86,6 +99,10 @@ export default {
         canRegister: {
             type: Boolean,
         },
+        isLoggedIn: {
+            type: Boolean,
+            required: true,
+        },
         laravelVersion: {
             type: String,
             required: true,
@@ -107,17 +124,12 @@ export default {
 
     methods: {
         joinGame() {
-            console.log(this.join_code)
-            console.log(this.join_name)
             router.post('/join-lobby', {
                 code : this.join_code,
                 name: this.join_name
             })
         }
     }
-    // mounted(){
-    //     console.log(this.$global);
-    // }
 }
 </script>
 
