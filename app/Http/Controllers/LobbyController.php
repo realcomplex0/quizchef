@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use App\Models\Quiz;
 use App\Models\Lobby;
+use App\Events\JoinLobby;
 use Inertia\Inertia;
 
 class LobbyController extends Controller
@@ -63,6 +64,7 @@ class LobbyController extends Controller
             return Redirect::route('/');
         }
         $lobby = $lobbies[0];
+        $lobby_id = $lobby['id'];
         $quiz_id = $lobby['quiz_id'];
         $quizzes = Quiz::where('id', $quiz_id)->get();
         if($quizzes->isEmpty()){
@@ -76,7 +78,7 @@ class LobbyController extends Controller
         ]; // there will probably be more data later
 
         Redis::hset($lobby['id'], $playerData['player_id'], json_encode($playerData));
-
+        event(new JoinLobby($name, $code, $this->getPlayerList($lobby_id)));
         return Redirect::route('lobby.play')->with(['lobbyId' => $lobby['id'],'lobbyCode'=> $lobby['code'], 'title' => $quiz['title']]);
     }
     private function getPlayerList($lobby_id) {
@@ -86,7 +88,6 @@ class LobbyController extends Controller
             $playerObject = json_decode($jsonObject, true);
             $result[] = $playerObject;
         }
-        Log::Info($result);
         return $result;
     }
     

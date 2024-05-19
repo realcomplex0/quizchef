@@ -7,10 +7,27 @@ export default {
         title: String,
         players: Array
     },
+    data() {
+        return {
+            displayPlayers : this.players
+        }
+    },
     methods : {
         print () {
             console.log(this.players)
         }
+    },
+    mounted() {
+        Echo.channel(`lobby.${this.lobbyCode}`)
+            .listen('JoinLobby', (event) => {
+                console.log('MyEvent', event["player_list"]);
+                this.displayPlayers = event["player_list"]
+            });
+    },
+    watch: {
+        displayPlayers(newPlayerList) {
+            console.log('Player list updated:', newPlayerList);
+        },
     },
     components: {
         PlayerName
@@ -29,10 +46,10 @@ export default {
             <button @click="print" class="btn-red"> Test </button>
             <p class="p-8 text-white text-xl">QuizChef</p>
         </div>
-        <p class="p-10 text-white text-xl">{{ players.length }} players</p>
+        <p class="p-10 text-white text-xl">{{ displayPlayers.length }} players</p>
         <div class="grid grid-cols-6 gap-4 p-4">
     
-            <div v-for="player in players">
+            <div v-for="player in displayPlayers">
                 <PlayerName :player="player" />
             </div>
         </div>

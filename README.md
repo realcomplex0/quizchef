@@ -66,3 +66,11 @@ To clear the list of routes
 ```
 php artisan route:clear
 ```
+
+## Websocket setup
+
+To launch the Websocket server, use:
+
+```
+php artisan reverb:start
+```
