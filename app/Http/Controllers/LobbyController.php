@@ -28,7 +28,17 @@ class LobbyController extends Controller
         }
         return -1;
     }
-
+    
+    private function getPlayerList($lobby_id) {
+        $playersInLobby = Redis::hgetall($lobby_id);
+        $result = [];
+        foreach ($playersInLobby as $key => $jsonObject) {
+            $playerObject = json_decode($jsonObject, true);
+            $result[] = $playerObject;
+        }
+        return $result;
+    }
+    
     public function create(Request $request)
     {
         $data = $request->validate([
@@ -81,17 +91,8 @@ class LobbyController extends Controller
         event(new JoinLobby($name, $code, $this->getPlayerList($lobby_id)));
         return Redirect::route('lobby.play')->with(['lobbyId' => $lobby['id'],'lobbyCode'=> $lobby['code'], 'title' => $quiz['title']]);
     }
-    private function getPlayerList($lobby_id) {
-        $playersInLobby = Redis::hgetall($lobby_id);
-        $result = [];
-        foreach ($playersInLobby as $key => $jsonObject) {
-            $playerObject = json_decode($jsonObject, true);
-            $result[] = $playerObject;
-        }
-        return $result;
-    }
     
-    public function host() {
+    public function hostView() {
         $lobbyCode = session('lobbyCode', null);
         $title = session('title', null);
         $lobbyId = session('lobbyId', null);
@@ -105,7 +106,7 @@ class LobbyController extends Controller
             'players' => $playerList]);
     }
 
-    public function play() {
+    public function playerView() {
         $lobbyCode = session('lobbyCode', null);
         $title = session('title', null);
         $lobbyId = session('lobbyId', null);
