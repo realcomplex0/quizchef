@@ -28,15 +28,14 @@ export default {
                     <p class="text-white underline">
                         {{ $page.props.auth.user.username }}
                     </p>
-                    <button type="submit" class="ml-4 btn-red w-16 h-10 text-white border-2">
-                        <Link 
-                            :href="route('logout')" 
-                            method="post"
-                            >
-                            Log Out
-                        </Link>
-                        
-                    </button>
+                    <Link 
+                        :href="route('logout')" 
+                        method="post"
+                        as="button"
+                        class="ml-4 btn-red w-16 h-10 text-white border-2"
+                        >
+                        Log Out
+                    </Link>
                 </div>
             </div>
             <div class="p-6 flex flex-col h-full border-t-2 border-white">
@@ -45,6 +44,9 @@ export default {
                     <div class="pl-7">
                         <p class="text-white text-xl ">Search _____________________ </p>
                     </div>
+                    <p class="pl-7 text-white text-xl">
+                        New Quiz
+                    </p>
                 </div>
                 <div class="overflow-y-auto max-h-[70%]">
                     <QuizBar v-for="quiz in quizzes" :key="quiz.id" :quiz="quiz"/>

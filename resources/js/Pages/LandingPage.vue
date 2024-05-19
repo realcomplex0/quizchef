@@ -22,7 +22,7 @@
         </div>
 
         <!-- Login/register box -->
-        <div v-if="canLogin" class="absolute w-1/5 h-1/2 bg-light border-2 rounded-lg anchor-center" style="left:30%;top:50%">
+        <div v-if="!isLoggedIn" class="absolute w-1/5 h-1/2 bg-light border-2 rounded-lg anchor-center" style="left:30%;top:50%">
             <!-- Title -->
             <div class="absolute left-1/2 anchor-center" style="top:10%">
                 <p class="absolute text-2xl text-white font-bold anchor-center left-1/2 top-1/2 select-none text-nowrap">{{ $global.lang.landingPage.ifYoureHosting }}</p>
@@ -46,29 +46,44 @@
                 <p class="text-mid">{{ $global.lang.generic.register }}</p>
             </Link>
         </div>
-        <div v-else class="text-white">canLogin == false; implement a thing that takes you to dashboard</div>
+        <div v-else class="absolute w-1/5 h-1/2 bg-light border-2 rounded-lg anchor-center" style="left:30%;top:50%">
+            <!-- Title -->
+            <div class="absolute left-1/2 anchor-center" style="top:10%">
+                <p class="absolute text-2xl text-white font-bold anchor-center left-1/2 top-1/2 select-none text-nowrap">{{ $global.lang.landingPage.ifYoureHosting }}</p>
+            </div>
+            
+            <!-- Login Button -->
+            <Link
+                :href="route('login')"
+                class="btn-green absolute landing-page-btn" style="top:35%;height:20%;width:75%"
+            >
+                <p class="text-mid"> Dashboard </p>
+            </Link>
+        </div>
 
         <!-- Join room box -->
         <div class="absolute w-1/5 h-1/2 bg-light border-2 rounded-lg anchor-center" style="left:70%;top:50%">
             <!-- Title -->
-            <div class="absolute left-1/2 anchor-center" style="top:10%">
+            <!-- <div class="absolute left-1/2 anchor-center" style="top:10%">
                 <p class="absolute text-2xl text-white font-bold anchor-center left-1/2 top-1/2 select-none text-nowrap">{{ $global.lang.landingPage.ifYourePlaying }}</p>
-            </div>
+            </div> -->
 
             <!-- TODO: room code text box -->
 
             <!-- Go to room button "Cook" -->
-            <Link
+            <input id="code" placeholder="Code" v-model="join_code" class="absolute bg-light text-white border-white border-2 landing-page-btn rounded-lg" style="top:15%;height:20%;width:75%"/>
+            <input id="code" placeholder="Name" v-model="join_name" class="absolute bg-light text-white border-white border-2 landing-page-btn rounded-lg" style="top:40%;height:20%;width:75%"/>
+            <button @click="joinGame"
                 class="btn-green absolute landing-page-btn" style="top:75%;height:20%;width:75%"
             >
                 <p class="text-mid">{{ $global.lang.landingPage.cook }}! 👨‍🍳</p>
-            </Link>
+            </button>
         </div>
     </div>
 </template>
 
 <script>
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import SettingsModal from '../Components/Settings/SettingsModal.vue';
 
 export default {
@@ -84,6 +99,10 @@ export default {
         canRegister: {
             type: Boolean,
         },
+        isLoggedIn: {
+            type: Boolean,
+            required: true,
+        },
         laravelVersion: {
             type: String,
             required: true,
@@ -96,14 +115,21 @@ export default {
 
     data (){
         return {
+            join_code: '',
+            join_name: '',
             aboutUsOpen: false,
             settingsOpen: false,
         }
     },
 
-    // mounted(){
-    //     console.log(this.$global);
-    // }
+    methods: {
+        joinGame() {
+            router.post('/join-lobby', {
+                code : this.join_code,
+                name: this.join_name
+            })
+        }
+    }
 }
 </script>
 

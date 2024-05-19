@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\QuizListController;
+use App\Http\Controllers\LobbyController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -12,6 +13,7 @@ Route::get('/', function () {
     return Inertia::render('LandingPage', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
+        'isLoggedIn' => Auth::check(),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
@@ -19,6 +21,12 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [QuizListController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::post('/create-lobby', [LobbyController::class, 'create'])->name('create-lobby');
+Route::post('/join-lobby', [LobbyController::class, 'join'])->name('join-lobby');
+
+Route::get('/lobby', [LobbyController::class, 'hostView'])->name('lobby.host');
+Route::post('/lobby', [LobbyController::class, 'playerView'])->name('lobby.play');
 
 
 Route::middleware('auth')->group(function () {
