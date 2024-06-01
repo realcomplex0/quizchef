@@ -1,11 +1,25 @@
 <script>
-import { Link, useForm } from '@inertiajs/vue3';
+import { Link, useForm, router } from '@inertiajs/vue3';
 import QuizBar from './QuizBar.vue';
 
 export default {
     props : {
         quizzes : {
             type: Object
+        }
+    },
+    data () { 
+        return {
+            currentQuizzes : []
+        }
+    },
+    mounted () {
+        this.currentQuizzes = this.quizzes
+    },
+    methods: {
+        removeQuiz(id){
+            this.currentQuizzes = this.currentQuizzes.filter(quiz => quiz.id !== id)
+            router.delete(`/new-quiz/${id}`)
         }
     },
     components: {
@@ -45,11 +59,15 @@ export default {
                         <p class="text-white text-xl ">Search _____________________ </p>
                     </div>
                     <p class="pl-7 text-white text-xl">
-                        New Quiz
+                        <Link 
+                            :href="route('quiz.view')" 
+                        >
+                            New Quiz
+                        </Link>
                     </p>
                 </div>
                 <div class="overflow-y-auto max-h-[70%]">
-                    <QuizBar v-for="quiz in quizzes" :key="quiz.id" :quiz="quiz"/>
+                    <QuizBar @remove-quiz="removeQuiz" v-for="quiz in currentQuizzes" :key="quiz.id" :quiz="quiz"/>
                 </div>
             </div>
         </div>

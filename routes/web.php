@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\QuizListController;
+use App\Http\Controllers\NewQuizController;
 use App\Http\Controllers\LobbyController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -22,12 +23,16 @@ Route::get('/', function () {
 Route::get('/dashboard', [QuizListController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/new-quiz/{id?}', [NewQuizController::class, 'view'])->name('quiz.view');
+Route::post('/new-quiz/{id?}', [NewQuizController::class, 'update'])->name('quiz.update');
+Route::delete('/new-quiz/{id}', [NewQuizController::class, 'destroy'])->name('quiz.destroy');
+Route::delete('/new-quiz/{id}/{question_id}', [NewQuizController::class, 'destroy_question'])->name('question.destroy');
+
 Route::post('/create-lobby', [LobbyController::class, 'create'])->name('create-lobby');
 Route::post('/join-lobby', [LobbyController::class, 'join'])->name('join-lobby');
 
 Route::get('/lobby', [LobbyController::class, 'hostView'])->name('lobby.host');
 Route::post('/lobby', [LobbyController::class, 'playerView'])->name('lobby.play');
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
