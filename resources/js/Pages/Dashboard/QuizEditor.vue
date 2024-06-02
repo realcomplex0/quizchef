@@ -39,7 +39,6 @@ export default {
     },
     methods: {
         localQuiz(newQuiz) {
-            console.log(newQuiz)
             if(newQuiz){
                 this.title = newQuiz.title;
                 this.currentQuiz = newQuiz;

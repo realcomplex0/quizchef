@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use App\Models\Quiz;
 use App\Models\Lobby;
+use App\Models\LobbyPlayer;
 use App\Events\JoinLobby;
 use Inertia\Inertia;
 
@@ -30,13 +31,8 @@ class LobbyController extends Controller
     }
     
     private function getPlayerList($lobby_id) {
-        $playersInLobby = Redis::hgetall($lobby_id);
-        $result = [];
-        foreach ($playersInLobby as $key => $jsonObject) {
-            $playerObject = json_decode($jsonObject, true);
-            $result[] = $playerObject;
-        }
-        return $result;
+        $players = LobbyPlayer::where('lobby_id', $lobby_id)->get();
+        return $players;
     }
     
     public function create(Request $request)
@@ -81,13 +77,10 @@ class LobbyController extends Controller
             return Redirect::route('/'); // TODO: send error message
         }
         $quiz = $quizzes[0];
-
-        $playerData = [
-            'player_id' => rand(1, 10000),
-            'player_name' => $name
-        ]; // there will probably be more data later
-
-        Redis::hset($lobby['id'], $playerData['player_id'], json_encode($playerData));
+        $player = new LobbyPlayer();
+        $player->nickname = $name;
+        $player->lobby_id = $lobby_id;
+        $player->save();
         event(new JoinLobby($name, $code, $this->getPlayerList($lobby_id)));
         return Redirect::route('lobby.play')->with(['lobbyId' => $lobby['id'],'lobbyCode'=> $lobby['code'], 'title' => $quiz['title']]);
     }
