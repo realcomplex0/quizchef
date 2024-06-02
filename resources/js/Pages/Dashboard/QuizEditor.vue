@@ -83,10 +83,10 @@ export default {
         },
         saveQuiz () {
             if (this.currentQuiz.id){
-                router.post(`/new-quiz/${this.currentQuiz.id}`, this.currentQuiz)
+                router.post(`/quiz/${this.currentQuiz.id}`, this.currentQuiz)
             }
             else{
-                router.post('/new-quiz', this.currentQuiz)
+                router.post('/quiz', this.currentQuiz)
             }
         },
         saveTitle() {
@@ -108,7 +108,7 @@ export default {
             this.selectedQuestion = id;
         },
         deleteSelectedQuestion () {
-            router.delete(`/new-quiz/${this.currentQuiz.id}/${this.currentQuiz.questions[this.selectedQuestion].id}`)
+            router.delete(`/quiz/${this.currentQuiz.id}/question/${this.currentQuiz.questions[this.selectedQuestion].id}`)
         },
         addQuestion() {
             this.currentQuiz.questions.push({
@@ -132,7 +132,7 @@ export default {
             this.saveQuiz()
         },
         deleteOption (idx) {
-            router.delete(`/new-quiz/${this.currentQuiz.id}/option/${idx}`)
+            router.delete(`/quiz/${this.currentQuiz.id}/option/${idx}`)
         }
     },
     components: {
@@ -191,7 +191,7 @@ export default {
                                 {{ option.title }}
                             </p>
                             <input v-else v-model="option.title" ref="options" @keyup.enter="saveOption" @blur="saveOption" class="text-blue-600"/>
-                            <button @click="deleteOption(option.id)" class="m-4 inline-flex items-center justify-center w-6 h-6 bg-gray-200 rounded-full hover:bg-gray-300 focus:outline-none focus:bg-gray-300">
+                            <button @click="deleteOption(option.id)" class="m-4 inline-flex items-center justify-center w-6 h-6 bg-gray-200 rounded-full hover:bg-gray-500 focus:outline-none select-none">
                                 <svg class="w-4 h-4 text-gray-600" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                                     <path d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>

@@ -19,7 +19,7 @@ export default {
     methods: {
         removeQuiz(id){
             this.currentQuizzes = this.currentQuizzes.filter(quiz => quiz.id !== id)
-            router.delete(`/new-quiz/${id}`)
+            router.delete(`/quiz/${id}`)
         }
     },
     components: {

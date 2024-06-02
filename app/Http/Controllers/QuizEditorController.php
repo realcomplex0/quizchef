@@ -12,7 +12,7 @@ use App\Models\Quiz;
 use App\Models\Question;
 use App\Models\Option;
 
-class NewQuizController extends Controller
+class QuizEditorController extends Controller
 {
     public function load_quiz($id){
         return Quiz::with('questions.options')->where('id', $id)->first();
@@ -21,7 +21,7 @@ class NewQuizController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-        return Inertia::render('Dashboard/NewQuiz', [
+        return Inertia::render('Dashboard/QuizEditor', [
             'quiz' => $this->load_quiz($id)
         ]);
     }
@@ -102,12 +102,5 @@ class NewQuizController extends Controller
         catch (ModelNotFoundException $exception) {
             return redirect()->route('quiz.view', ['id' => $id]);
         }
-    }
-    public function destroy($id) {
-        if(!Auth::check()){
-            return redirect()->route('login');
-        }
-        $quiz = Quiz::findOrFail($id);
-        $quiz->delete();
     }
 }

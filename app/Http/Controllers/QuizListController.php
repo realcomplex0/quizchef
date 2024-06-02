@@ -18,4 +18,14 @@ class QuizListController extends Controller
         Log::Info($quizzes);
         return Inertia::render('Dashboard/QuizList', ['quizzes' => $quizzes]);
     }
+    public function destroy($id)
+    {
+        $user = Auth::user();
+        if(!Auth::check()){
+            return redirect()->route('login');
+        }
+        $quiz = Quiz::findOrFail($id);
+        $quiz->delete();
+        return redirect()->route('dashboard');
+    }
 }
