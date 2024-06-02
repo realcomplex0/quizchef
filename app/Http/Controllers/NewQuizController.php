@@ -32,11 +32,12 @@ class NewQuizController extends Controller
         $user_id = Auth::id();
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
-            'questions' => 'required|array',
+            'questions' => 'required|array|max:10',
             'questions.*.title' => 'required|string',
             'questions.*.id' => 'numeric|min:0',
-            'questions.*.options' => 'required|array',
+            'questions.*.options' => 'required|array|max:8',
             'questions.*.options.*.title' => 'required|string',
+            'questions.*.options.*.correct' => 'required|boolean',
             'questions.*.options.*.id' => 'numeric|min:0'
         ]);
         if($id == null){
@@ -70,6 +71,7 @@ class NewQuizController extends Controller
                 }
                 $option->question_id = $question->id;
                 $option->title = $optionObject['title'];
+                $option->correct = $optionObject['correct'];
                 $option->index = 0;
                 $option->save();
             }
@@ -85,6 +87,19 @@ class NewQuizController extends Controller
             $question->delete();
             return redirect()->route('quiz.view', ['id' => $id]);
         } catch (ModelNotFoundException $exception) {
+            return redirect()->route('quiz.view', ['id' => $id]);
+        }
+    }
+    public function destroy_option($id, $option_id) {
+        if(!Auth::check()){
+            return redirect()->route('login');
+        }
+        try{
+            $option = Option::findOrFail($option_id);
+            $option->delete();
+            return redirect()->route('quiz.view', ['id' => $id]);
+        }
+        catch (ModelNotFoundException $exception) {
             return redirect()->route('quiz.view', ['id' => $id]);
         }
     }
