@@ -16,6 +16,7 @@ Laravel Sail is used for local development [(Link)](https://laravel.com/docs/11.
 
 Launching Sail:
 
+
 ```
 docker run --rm \
     -u "$(id -u):$(id -g)" \
