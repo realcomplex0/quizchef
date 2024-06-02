@@ -14,6 +14,17 @@ All commands should be launched using Windows WSL
 ## Launching the project
 Laravel Sail is used for local development [(Link)](https://laravel.com/docs/11.x/sail#introduction)
 
+Launching Sail:
+
+```
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/var/www/html \
+    -w /var/www/html \
+    laravelsail/php83-composer:latest \
+    composer update laravel/sail
+```
+
 Launching the project:
 
 ```
@@ -74,3 +85,4 @@ To launch the Websocket server, use:
 ```
 php artisan reverb:start
 ```
+

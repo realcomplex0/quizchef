@@ -10,7 +10,7 @@ export default {
 
 <template>
     <p class="text-yellow-700">
-        {{player.player_name}}
+        {{player.nickname}}
     </p>
     
 </template>

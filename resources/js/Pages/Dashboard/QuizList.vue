@@ -1,11 +1,25 @@
 <script>
-import { Link, useForm } from '@inertiajs/vue3';
+import { Link, useForm, router } from '@inertiajs/vue3';
 import QuizBar from './QuizBar.vue';
 
 export default {
     props : {
         quizzes : {
             type: Object
+        }
+    },
+    data () { 
+        return {
+            currentQuizzes : []
+        }
+    },
+    mounted () {
+        this.currentQuizzes = this.quizzes
+    },
+    methods: {
+        removeQuiz(id){
+            this.currentQuizzes = this.currentQuizzes.filter(quiz => quiz.id !== id)
+            router.delete(`/quiz/${id}`)
         }
     },
     components: {
@@ -18,7 +32,7 @@ export default {
 <template>
     <div class="absolute w-full h-full">
         <div class="flex flex-col w-full h-full">
-            <div class="p-6 bg-light flex space-between items-center justify-between">
+            <div class="p-6 bg-light flex space-between items-center justify-between border-b-2 border-white">
                 <p class="text-5xl text-white font-bold select-none">
                     <Link href='/'>
                         QuizChef
@@ -38,18 +52,22 @@ export default {
                     </Link>
                 </div>
             </div>
-            <div class="p-6 flex flex-col h-full border-t-2 border-white">
-                <div class="flex flex-row items-center">
+            <div class="p-4 flex flex-col h-full">
+                <div class="p-4 flex flex-row items-center border-b-2 border-gray-500">
                     <p class="text-xl text-white">My quizzes</p>
                     <div class="pl-7">
                         <p class="text-white text-xl ">Search _____________________ </p>
                     </div>
                     <p class="pl-7 text-white text-xl">
-                        New Quiz
+                        <Link 
+                            :href="route('quiz.view')" 
+                        >
+                            New Quiz
+                        </Link>
                     </p>
                 </div>
                 <div class="overflow-y-auto max-h-[70%]">
-                    <QuizBar v-for="quiz in quizzes" :key="quiz.id" :quiz="quiz"/>
+                    <QuizBar @remove-quiz="removeQuiz" v-for="quiz in currentQuizzes" :key="quiz.id" :quiz="quiz"/>
                 </div>
             </div>
         </div>

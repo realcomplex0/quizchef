@@ -1,9 +1,12 @@
 <script>
 
-import { router } from '@inertiajs/vue3'
+import { router, Link } from '@inertiajs/vue3'
 
 export default {
     props: {
+        removeQuiz: {
+            type: function(){}
+        },
         quiz: {
             type: Object
         }
@@ -13,7 +16,13 @@ export default {
             router.post('/create-lobby', {
                 id : this.quiz.id
             })
+        },
+        deleteQuiz() {
+            this.$emit('remove-quiz', this.quiz.id)
         }
+    },
+    components: {
+        Link
     }
 }
 </script>
@@ -29,10 +38,15 @@ export default {
             <button @click="startGame" class="mr-4 btn-green w-20 h-10 text-white border-2">
                 Play
             </button>
-            <button type="submit" class="mr-8 btn-red w-20 h-10 text-white border-2">
+            <Link
+                :href="route('quiz.view', { id : quiz.id })">
+                <button class="mr-4 btn-blue w-20 h-10 text-white border-2">
+                    Edit
+                </button>
+            </Link>
+            <button @click="deleteQuiz" class="mr-8 btn-red w-20 h-10 text-white border-2">
                 Delete
             </button>
         </div>
-        
     </div>
 </template>
