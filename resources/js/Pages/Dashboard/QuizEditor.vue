@@ -6,10 +6,10 @@ export default {
         return {
             currentQuiz: {
                 plays: 0,
-                title: 'MyQuiz',
+                title: 'Untitled Quiz',
                 questions : [
                     {
-                        title: 'Question 0',
+                        title: 'Question 1',
                         options: [
                             {title: 'Alpha', correct: 0},
                             {title: 'Beta', correct: 1},
@@ -45,7 +45,7 @@ export default {
                 if(newQuiz.questions.length == 0){
                     this.currentQuiz.questions = [
                         {
-                            title: 'Question 0',
+                            title: 'Question 1',
                             options: [
                                 {title: 'Alpha', correct: 0},
                                 {title: 'Beta', correct: 1},
@@ -111,7 +111,7 @@ export default {
         },
         addQuestion() {
             this.currentQuiz.questions.push({
-                title: `Question ${this.currentQuiz.questions.length}`,
+                title: `Question ${this.currentQuiz.questions.length + 1}`,
                 options: [
                     {title: 'Alpha', correct: 1},
                     {title: 'Beta', correct: 1},
@@ -125,7 +125,7 @@ export default {
         newOption() {
             if (this.currentQuiz.questions[this.selectedQuestion].options.length >= 8) return
             this.currentQuiz.questions[this.selectedQuestion].options.push({
-                title : 'Ein Option',
+                title : 'Untitled Answer',
                 correct : 0
             })
             this.saveQuiz()
@@ -158,13 +158,15 @@ export default {
                 </div>
             </div>
             <div class="flex flex-row">
-                <div class="w-1/6 text-3xl border-r-2 max-h-[70vh] flex flex-col items-center overflow-y-auto overflow-x-hidden">
-                    <div v-for="(question, index) in currentQuiz.questions" 
-                        :key="index"
-                        class="h-20"
-                    > 
-                        <button v-if="selectedQuestion!=index" class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold m-4 w-16 h-16 rounded select-none" @click="handleSelect(index)"> {{ index + 1 }}</button>
-                        <button v-else class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold m-4 w-16 h-16 border-8 border-orange-500 rounded select-none" @click="handleSelect(index)"> {{ index + 1}}</button>
+                <div class="w-1/6 text-3xl border-r-2 flex flex-col items-center">
+                    <div class="max-h-[70vh] flex flex-col items-center overflow-y-auto overflow-x-hidden">
+                        <div v-for="(question, index) in currentQuiz.questions" 
+                            :key="index"
+                            class="h-20"
+                        > 
+                            <button v-if="selectedQuestion!=index" class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold m-4 w-16 h-16 rounded select-none" @click="handleSelect(index)"> {{ index + 1 }}</button>
+                            <button v-else class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold m-4 w-16 h-16 border-8 border-orange-500 rounded select-none" @click="handleSelect(index)"> {{ index + 1}}</button>
+                        </div>
                     </div>
                     <div class="h-20">
                         <button class="bg-green-500 hover:bg-green-600 text-green-700 font-bold text-5xl m-4 w-16 h-16 rounded select-none" @click="addQuestion"> + </button>
@@ -203,7 +205,7 @@ export default {
                 </div>
                 <div>
                     <button @click="deleteSelectedQuestion" class="mt-16 mr-8 btn-red w-48 h-10 text-white border-2">
-                        Delete Question
+                        Delete question
                     </button>
                 </div>
             </div>
