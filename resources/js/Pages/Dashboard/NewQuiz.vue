@@ -11,14 +11,15 @@ export default {
                     {
                         title: 'Question 0',
                         options: [
-                            {title: 'Alpha'},
-                            {title: 'Beta'},
-                            {title: 'Omega'}
+                            {title: 'Alpha', correct: 0},
+                            {title: 'Beta', correct: 1},
+                            {title: 'Omega', correct: 1}
                         ]
                     }
                 ]
             },
             selectedQuestion: 0,
+            selectedOption: -1,
             editing: false,
             isEditingQuestionTitle: false,
         }
@@ -38,6 +39,7 @@ export default {
     },
     methods: {
         localQuiz(newQuiz) {
+            console.log(newQuiz)
             if(newQuiz){
                 this.title = newQuiz.title;
                 this.currentQuiz = newQuiz;
@@ -46,9 +48,9 @@ export default {
                         {
                             title: 'Question 0',
                             options: [
-                                {title: 'Alpha', editing: false},
-                                {title: 'Beta', editing: false},
-                                {title: 'Omega', editing: false}
+                                {title: 'Alpha', correct: 0},
+                                {title: 'Beta', correct: 1},
+                                {title: 'Omega', correct: 1}
                             ]
                         }
                     ]
@@ -73,10 +75,10 @@ export default {
             })
         },
         selectOption(index) {
-            this.editOption = index
+            this.selectedOption = index
             this.$nextTick(() => {
-                this.$refs.optionInput.focus();
-                this.$refs.optionInput.select();
+                this.$refs.options[0].focus();
+                this.$refs.options[0].select();
             })
         },
         saveQuiz () {
@@ -98,8 +100,8 @@ export default {
             this.saveQuiz() 
         },
         saveOption() {
-            if(this.editOption == -1) return
-            this.editOption = -1
+            if(this.selectedOption === -1) return
+            this.selectedOption = -1
             this.saveQuiz()
         },
         handleSelect(id) {
@@ -112,14 +114,25 @@ export default {
             this.currentQuiz.questions.push({
                 title: `Question ${this.currentQuiz.questions.length}`,
                 options: [
-                    {title: 'Alpha'},
-                    {title: 'Beta'},
-                    {title: 'Omega'},
-                    {title: 'Omicron'}
+                    {title: 'Alpha', correct: 1},
+                    {title: 'Beta', correct: 1},
+                    {title: 'Omega', correct: 0},
+                    {title: 'Omicron', correct: 1}
                 ]
             })
             this.selectedQuestion = this.currentQuiz.questions.length - 1
             this.saveQuiz()
+        },
+        newOption() {
+            if (this.currentQuiz.questions[this.selectedQuestion].options.length >= 8) return
+            this.currentQuiz.questions[this.selectedQuestion].options.push({
+                title : 'Ein Option',
+                correct : 0
+            })
+            this.saveQuiz()
+        },
+        deleteOption (idx) {
+            router.delete(`/new-quiz/${this.currentQuiz.id}/option/${idx}`)
         }
     },
     components: {
@@ -151,8 +164,8 @@ export default {
                         :key="index"
                         class="h-20"
                     > 
-                        <button v-if="selectedQuestion!=index" class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold m-4 w-16 h-16 rounded select-none" @click="handleSelect(index)"> {{ index }}</button>
-                        <button v-else class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold m-4 w-16 h-16 border-8 border-orange-500 rounded select-none" @click="handleSelect(index)"> {{ index }}</button>
+                        <button v-if="selectedQuestion!=index" class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold m-4 w-16 h-16 rounded select-none" @click="handleSelect(index)"> {{ index + 1 }}</button>
+                        <button v-else class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold m-4 w-16 h-16 border-8 border-orange-500 rounded select-none" @click="handleSelect(index)"> {{ index + 1}}</button>
                     </div>
                     <div class="h-20">
                         <button class="bg-green-500 hover:bg-green-600 text-green-700 font-bold text-5xl m-4 w-16 h-16 rounded select-none" @click="addQuestion"> + </button>
@@ -169,17 +182,24 @@ export default {
                         <div 
                             v-for="(option, index) in currentQuiz.questions[selectedQuestion].options" 
                             :key="index"
-                            class="w-80 h-16 m-4 flex items-center justify-center bg-gray-700 border-2 rounded-xl text-white"
+                            class="w-80 h-16 m-2 flex items-center justify-between bg-gray-700 border-2 rounded-xl text-white"
                         >
-                            <p v-if="editOption!=index" @click="selectOption(index)">
+                            <input type="checkbox" v-model="option.correct" true-value="1" false-value="0"
+                                @change="saveQuiz"
+                                class="m-4 rounded-full h-6 w-6 text-green-600 focus:ring-blue-600 border-gray-300" />
+                            <p v-if="selectedOption!=index" @click="selectOption(index)">
                                 {{ option.title }}
                             </p>
-                            <input v-else v-model="option.title" ref="optionInput" @keyup.enter="saveOption" @blur="saveOption" class="text-blue-600"/>
-                            
+                            <input v-else v-model="option.title" ref="options" @keyup.enter="saveOption" @blur="saveOption" class="text-blue-600"/>
+                            <button @click="deleteOption(option.id)" class="m-4 inline-flex items-center justify-center w-6 h-6 bg-gray-200 rounded-full hover:bg-gray-300 focus:outline-none focus:bg-gray-300">
+                                <svg class="w-4 h-4 text-gray-600" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
                         </div>
-                        <div class="w-80 h-16 m-4 flex items-center justify-center bg-green-700 border-2 rounded-xl text-white">
+                        <button v-if="currentQuiz.questions[selectedQuestion].options.length<8" @click="newOption" class="w-80 h-16 m-2 btn-green rounded-xl text-white border-2">
                             + New option
-                        </div>
+                        </button>
                     </div>
                 </div>
                 <div>

@@ -27,6 +27,7 @@ Route::get('/new-quiz/{id?}', [NewQuizController::class, 'view'])->name('quiz.vi
 Route::post('/new-quiz/{id?}', [NewQuizController::class, 'update'])->name('quiz.update');
 Route::delete('/new-quiz/{id}', [NewQuizController::class, 'destroy'])->name('quiz.destroy');
 Route::delete('/new-quiz/{id}/{question_id}', [NewQuizController::class, 'destroy_question'])->name('question.destroy');
+Route::delete('/new-quiz/{id}/option/{option_id}', [NewQuizController::class, 'destroy_option'])->name('option.destroy');
 
 Route::post('/create-lobby', [LobbyController::class, 'create'])->name('create-lobby');
 Route::post('/join-lobby', [LobbyController::class, 'join'])->name('join-lobby');

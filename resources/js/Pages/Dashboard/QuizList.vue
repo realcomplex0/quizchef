@@ -32,7 +32,7 @@ export default {
 <template>
     <div class="absolute w-full h-full">
         <div class="flex flex-col w-full h-full">
-            <div class="p-6 bg-light flex space-between items-center justify-between">
+            <div class="p-6 bg-light flex space-between items-center justify-between border-b-2 border-white">
                 <p class="text-5xl text-white font-bold select-none">
                     <Link href='/'>
                         QuizChef
@@ -52,8 +52,8 @@ export default {
                     </Link>
                 </div>
             </div>
-            <div class="p-6 flex flex-col h-full border-t-2 border-white">
-                <div class="flex flex-row items-center">
+            <div class="p-4 flex flex-col h-full">
+                <div class="p-4 flex flex-row items-center border-b-2 border-gray-500">
                     <p class="text-xl text-white">My quizzes</p>
                     <div class="pl-7">
                         <p class="text-white text-xl ">Search _____________________ </p>

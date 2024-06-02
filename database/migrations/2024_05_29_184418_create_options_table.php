@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("question_id");
             $table->unsignedInteger("index");
+            $table->boolean('correct')->default(false);
             $table->string('title');
             $table->foreign('question_id')
                 ->references('id')
