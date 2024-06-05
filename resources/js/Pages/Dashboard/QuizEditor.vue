@@ -131,7 +131,13 @@ export default {
             this.saveQuiz()
         },
         deleteOption (idx) {
-            router.delete(`/quiz/${this.currentQuiz.id}/option/${idx}`)
+            this.currentQuiz.questions[this.selectedQuestion].options.splice(idx, 1)
+            if (!this.currentQuiz.id){
+                this.saveQuiz()
+            }
+            else{
+                router.delete(`/quiz/${this.currentQuiz.id}/option/${idx}`)
+            }
         }
     },
     components: {
