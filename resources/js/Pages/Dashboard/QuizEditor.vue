@@ -18,6 +18,7 @@ export default {
                     }
                 ]
             },
+            defaultQuestions: true,
             selectedQuestion: 0,
             selectedOption: -1,
             editing: false,
@@ -43,6 +44,7 @@ export default {
                 this.title = newQuiz.title;
                 this.currentQuiz = newQuiz;
                 if(newQuiz.questions.length == 0){
+                    this.defaultQuestions = true
                     this.currentQuiz.questions = [
                         {
                             title: 'Question 1',
@@ -53,6 +55,9 @@ export default {
                             ]
                         }
                     ]
+                }
+                else{
+                    this.defaultQuestions = false
                 }
             }
             if (this.selectedQuestion >= this.currentQuiz.questions.length){
@@ -131,8 +136,8 @@ export default {
             this.saveQuiz()
         },
         deleteOption (idx) {
-            this.currentQuiz.questions[this.selectedQuestion].options.splice(idx, 1)
-            if (!this.currentQuiz.id){
+            if (this.defaultQuestions){
+                this.currentQuiz.questions[this.selectedQuestion].options.splice(idx, 1)
                 this.saveQuiz()
             }
             else{

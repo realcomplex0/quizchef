@@ -32,10 +32,10 @@ class QuizEditorController extends Controller
         $user_id = Auth::id();
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
-            'questions' => 'required|array|max:10',
+            'questions' => 'required|array|min:1|max:10',
             'questions.*.title' => 'required|string',
             'questions.*.id' => 'numeric|min:0',
-            'questions.*.options' => 'required|array|max:8',
+            'questions.*.options' => 'array|max:8',
             'questions.*.options.*.title' => 'required|string',
             'questions.*.options.*.correct' => 'required|boolean',
             'questions.*.options.*.id' => 'numeric|min:0'
