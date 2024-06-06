@@ -84,7 +84,7 @@
 
 <script>
 import { Link, router } from '@inertiajs/vue3';
-import SettingsModal from '../Components/Settings/SettingsModal.vue';
+import SettingsModal from '../Components/SettingsModal.vue';
 
 export default {
     components: {
