@@ -11,6 +11,7 @@ use App\Models\Quiz;
 use App\Models\Lobby;
 use App\Models\LobbyPlayer;
 use App\Events\JoinLobby;
+use App\Events\StartGame;
 use Inertia\Inertia;
 
 class LobbyController extends Controller
@@ -112,4 +113,19 @@ class LobbyController extends Controller
             'title' => $title,
             'players' => $playerList]);
     }
+
+    public function startGame(Request $request) {
+        $data = $request->validate([
+            'code' => 'required'
+        ]);
+        event(new StartGame($data['code']));
+        
+        return Redirect::route('game.go')->with(['lobbyCode' => $data['code']]);
+    }
+
+    public function gameView() {
+
+        return Inertia::render('Game/GameRoom');
+    }
+
 }

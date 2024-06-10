@@ -5,6 +5,7 @@ use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\QuizListController;
 use App\Http\Controllers\QuizEditorController;
 use App\Http\Controllers\LobbyController;
+use App\Models\Lobby;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,6 +35,10 @@ Route::post('/join-lobby', [LobbyController::class, 'join'])->name('join-lobby')
 
 Route::get('/lobby', [LobbyController::class, 'hostView'])->name('lobby.host');
 Route::post('/lobby', [LobbyController::class, 'playerView'])->name('lobby.play');
+
+Route::post('/start-game', [LobbyController::class, 'startGame'])->name('lobby.start');
+
+Route::get('/game', [LobbyController::class, 'gameView'])->name('game.go');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -1,6 +1,6 @@
 <script>
 import PlayerName from './PlayerName.vue';
-import {Link} from '@inertiajs/vue3';
+import {Link, router} from '@inertiajs/vue3';
 
 export default {
     props : {
@@ -16,8 +16,19 @@ export default {
     mounted() {
         Echo.channel(`lobby.${this.lobbyCode}`)
             .listen('JoinLobby', (event) => {
-                this.displayPlayers = event["player_list"]
+                this.displayPlayers = event["player_list"];
             });
+        Echo.channel(`lobby.${this.lobbyCode}`)
+            .listen('StartGame', (event) => {
+                router.get('/game');
+            });
+    },
+    methods: {
+        startgame() {
+            router.post('/start-game', {
+                code : this.lobbyCode
+            })
+        }
     },
     watch: {
         displayPlayers(newPlayerList) {
@@ -45,10 +56,12 @@ export default {
                 </Link>
             </p>
         </div>
+
+        <button @click="startgame" class="btn-green absolute" style="right:0%;height:100px;width:200px">Start game</button>
+
         <p class="p-10 text-white text-xl">{{ displayPlayers.length }} players</p>
         <div class="grid grid-cols-6 gap-4 p-4">
-    
-            <div v-for="player in displayPlayers">
+            <div v-for="player in displayPlayers" :key="player">
                 <PlayerName :player="player" />
             </div>
         </div>
