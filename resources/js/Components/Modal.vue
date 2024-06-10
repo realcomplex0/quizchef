@@ -1,7 +1,13 @@
 <!-- :isOpen: true - component is shown; false - component is hidden -->
-<!-- @close: emits when settings tab should be closed -->
+<!-- @close: emits when modal should be closed -->
 <!-- :width and :height determine size of modal -->
-<!-- Example: <SettingsModal :isOpen="settingsOpen" @close="settingsOpen=false" :height="'100px'" :width="'25%'"/> -->
+
+<!-- 
+Example: 
+<Modal :isOpen="settingsOpen" @close="settingsOpen=false" :height="'100px'" :width="'25%'"/> 
+    <p> hello </p>
+</Modal>
+-->
 
 <template>
     <Transition name="fade">
