@@ -1,5 +1,6 @@
 <script>
 import { Link, router } from '@inertiajs/vue3';
+import Modal from '../../Components/Modal.vue';
 
 export default {
     data () {
@@ -23,6 +24,7 @@ export default {
             selectedOption: -1,
             editing: false,
             isEditingQuestionTitle: false,
+            deleteSelectedQuestionConfirm: false,
         }
     },
     props : {
@@ -112,7 +114,11 @@ export default {
             this.selectedQuestion = id;
         },
         deleteSelectedQuestion () {
+            this.deleteSelectedQuestionConfirm = false;
             router.delete(`/quiz/${this.currentQuiz.id}/question/${this.currentQuiz.questions[this.selectedQuestion].id}`)
+        },
+        deleteSelectedQuestionAsk() {
+            this.deleteSelectedQuestionConfirm = true;
         },
         addQuestion() {
             this.currentQuiz.questions.push({
@@ -146,16 +152,31 @@ export default {
         }
     },
     components: {
-        Link
+        Link, Modal
     }
 
 }
 </script>
 
 <template>
+    <!-- Modal for deleting questions -->
+    <Modal :isOpen="deleteSelectedQuestionConfirm" @close="deleteSelectedQuestionConfirm=false" :height="'9rem'" :width="'25%'" class="">
+        <div class="absolute w-full h-12 text-white border-b text-nowrap"> 
+            <p class="text-mid text-l">Delete Question {{ selectedQuestion+1 }}?</p>
+        </div>
+        <div class="absolute flex w-full h-12 bottom-6 justify-around">
+            <button @click="deleteSelectedQuestion" class="btn-red text-white border-2 p-3 w-1/3">
+                Delete
+            </button>
+            <button @click="deleteSelectedQuestionConfirm=false" class="btn-blue text-white border-2 p-3 w-1/3">
+                Cancel
+            </button>
+        </div>
+    </Modal>
+
     <div class="absolute w-full h-full">
         <div class="flex flex-col w-full h-full">
-            <div class="p-6 bg-light flex space-between items-center justify-between">
+            <div class="p-6 bg-light flex space-between items-center justify-between border-b-2 border-white">
                 <p class="text-5xl text-white font-bold select-none">
                     <Link :href="route('dashboard')">
                         QuizChef
@@ -215,7 +236,7 @@ export default {
                     </div>
                 </div>
                 <div>
-                    <button @click="deleteSelectedQuestion" class="mt-16 mr-8 btn-red w-48 h-10 text-white border-2">
+                    <button @click="deleteSelectedQuestionAsk" class="mt-16 mr-8 btn-red w-48 h-12 text-white border-2">
                         Delete question
                     </button>
                 </div>

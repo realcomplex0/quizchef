@@ -18,7 +18,7 @@ Example:
             <!-- main section -->
             <div class="absolute bg-light border-2 rounded-lg left-1/2 top-1/2 anchor-center text-white" :style="{height : height, width : width}">
                 <!-- close button -->
-                <button @click="close" class="absolute w-8 h-8 right-2 top-2 btn-red border-2">
+                <button @click="close" class="absolute w-8 h-8 right-2 top-2 btn-red border-2 z-10">
                     <p class="text-mid text-xl select-none font-extrabold">X</p>
                 </button>
                 <slot></slot>
