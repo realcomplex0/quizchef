@@ -1,6 +1,8 @@
 <script>
 import { Link, router } from '@inertiajs/vue3';
 import Modal from '../../Components/Modal.vue';
+import DeleteButton from '@/Components/DeleteButton.vue';
+import ImageUpload from './ImageUpload.vue';
 
 export default {
     data () {
@@ -142,8 +144,8 @@ export default {
             this.saveQuiz()
         },
         deleteOption (idx) {
+            this.currentQuiz.questions[this.selectedQuestion].options.splice(idx, 1)
             if (this.defaultQuestions){
-                this.currentQuiz.questions[this.selectedQuestion].options.splice(idx, 1)
                 this.saveQuiz()
             }
             else{
@@ -152,7 +154,7 @@ export default {
         }
     },
     components: {
-        Link, Modal
+        Link, Modal, DeleteButton, ImageUpload
     }
 
 }
@@ -204,13 +206,14 @@ export default {
                         <button class="bg-green-500 hover:bg-green-600 text-green-700 font-bold text-5xl m-4 w-16 h-16 rounded select-none" @click="addQuestion"> + </button>
                     </div>
                 </div>
-                <div class="flex pt-12 flex-col items-center justify-normal w-full">
+                <div class="flex flex-col items-center justify-normal w-full max-h-[70vh] overflow-y-auto">
                     <p v-if="!isEditingQuestionTitle" @click="editQuestionTitle"
                     class="text-white-500 p-4 text-white text-4xl select-none"> 
                         {{currentQuiz.questions[selectedQuestion].title}} 
                     </p>
                     <input v-else v-model="currentQuiz.questions[selectedQuestion].title" ref="input" @keyup.enter="saveQuestionTitle" @blur="saveQuestionTitle" 
                         class="bg-gray-700 m-4 text-white text-4xl h-10 select-none"/>
+                    <ImageUpload class="p-4"/>
                     <div class="grid grid-cols-2 gap-4">
                         <div 
                             v-for="(option, index) in currentQuiz.questions[selectedQuestion].options" 
@@ -224,11 +227,7 @@ export default {
                                 {{ option.title }}
                             </p>
                             <input v-else v-model="option.title" ref="options" @keyup.enter="saveOption" @blur="saveOption" class="text-blue-600"/>
-                            <button @click="deleteOption(option.id)" class="m-4 inline-flex items-center justify-center w-6 h-6 bg-gray-200 rounded-full hover:bg-gray-500 focus:outline-none select-none">
-                                <svg class="w-4 h-4 text-gray-600" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                            </button>
+                            <DeleteButton @click="deleteOption(option.id)" class="mr-4"/>
                         </div>
                         <button v-if="currentQuiz.questions[selectedQuestion].options.length<8" @click="newOption" class="w-80 h-16 m-2 btn-green rounded-xl text-white border-2">
                             + New option
