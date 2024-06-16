@@ -30,6 +30,8 @@ Route::post('/quiz/{id?}', [QuizEditorController::class, 'update'])->name('quiz.
 Route::delete('/quiz/{id}/question/{question_id}', [QuizEditorController::class, 'destroy_question'])->name('question.destroy');
 Route::delete('/quiz/{id}/option/{option_id}', [QuizEditorController::class, 'destroy_option'])->name('option.destroy');
 
+Route::post('/img/quiz/{id}/question/{question_id}', [QuizEditorController::class, 'upload_image'])->name('image.upload');
+Route::delete('/img/quiz/{id}/question/{question_id}', [QuizEditorController::class, 'destroy_image'])->name('image.destroy');
 Route::post('/create-lobby', [LobbyController::class, 'create'])->name('create-lobby');
 Route::post('/join-lobby', [LobbyController::class, 'join'])->name('join-lobby');
 

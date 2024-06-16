@@ -4,8 +4,17 @@ import DeleteButton from '@/Components/DeleteButton.vue';
 export default {
     data() {
         return {
-            imageUrl: null
+            currentImageUrl: null
         };
+    },
+    props : ['imgUrl'],
+    watch : {
+        imgUrl(newImageUrl) {
+            this.currentImageUrl = newImageUrl
+        }
+    },
+    mounted () {
+        this.currentImageUrl = this.imgUrl
     },
     methods: {
         openFileInput() {
@@ -16,17 +25,22 @@ export default {
             if (file) {
                 this.previewImage(file);
             }
+            this.saveImage(file)
         },
         previewImage(file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                this.imageUrl = e.target.result;
+                this.currentImageUrl = e.target.result;
             };
             reader.readAsDataURL(file);
         },
+        saveImage (img) {
+            this.$emit('img-save', img)
+        },
         removeImage() {
-            this.imageUrl = null
-        }
+            this.currentImageUrl = null
+            this.$emit('img-delete')
+        },
     },
     components: {
         DeleteButton
@@ -36,7 +50,7 @@ export default {
 
 <template>
 <div>
-    <div v-if="!imageUrl" class="h-40 w-80 border-4 border-dotted rounded-xl flex items-center justify-center flex-col" @click="openFileInput">
+    <div v-if="!currentImageUrl" class="h-40 w-80 border-4 border-dotted rounded-xl flex items-center justify-center flex-col" @click="openFileInput">
         <p class="text-2xl text-red-500">Upload your image here </p>
         <p class="text-red-500">Max.file size: 5MB</p>
         <input
@@ -49,7 +63,7 @@ export default {
         />
     </div>
     <div v-else class="relative select-none">
-        <img :src="imageUrl" alt="Uploaded Image" class="h-auto max-w-80 outline outline-4 outline-blue-500 rounded select-none"/>
+        <img @click="logger" :src="currentImageUrl" alt="Uploaded Image" class="h-auto max-w-80 outline outline-4 outline-blue-500 rounded select-none"/>
         <DeleteButton @click="removeImage" class="absolute top-2 left-2"/>
     </div>
 </div>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -89,6 +91,32 @@ class QuizEditorController extends Controller
         } catch (ModelNotFoundException $exception) {
             return redirect()->route('quiz.view', ['id' => $id]);
         }
+    }
+    public function upload_image(Request $request, $id, $question_id){
+        if(!Auth::check()){
+            return redirect()->route('login');
+        }
+        $request->validate([
+            'image' => 'required|image|max:5120'
+        ]);
+        $file = $request['image'];
+        $filename = Str::random(40) . '.' . $file->extension();
+        $file->storeAs('public/images', $filename);
+        $path = 'images/' . $filename;
+        $question = Question::findOrFail($question_id);
+        $question->image_path = $path;
+        $question->save();
+        return redirect()->route('quiz.view', ['id' => $id]);
+    }
+    public function destroy_image(Request $request, $id, $question_id){
+        if(!Auth::check()){
+            return redirect()->route('login');
+        }
+        $question = Question::findOrFail($question_id);
+        $question->image_path = null;
+        $question->save();
+        return redirect()->route('quiz.view', ['id' => $id]);
+
     }
     public function destroy_option($id, $option_id) {
         if(!Auth::check()){

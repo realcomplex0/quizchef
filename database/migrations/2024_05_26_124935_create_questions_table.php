@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger("quiz_id");
             $table->unsignedInteger("index");
             $table->string('title');
+            $table->string('image_path')->nullable();
             $table->foreign('quiz_id')
                 ->references('id')
                 ->on('quizzes')

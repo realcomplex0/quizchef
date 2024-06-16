@@ -87,3 +87,10 @@ To launch the Websocket server, use:
 php artisan reverb:start
 ```
 
+## Storage
+
+To refresh symbolic links with storage, use:
+
+```
+php artisan storage:link
+```

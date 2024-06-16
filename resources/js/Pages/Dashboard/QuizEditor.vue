@@ -25,6 +25,7 @@ export default {
             selectedQuestion: 0,
             selectedOption: -1,
             editing: false,
+            curImg: 'test',
             isEditingQuestionTitle: false,
             deleteSelectedQuestionConfirm: false,
         }
@@ -56,7 +57,7 @@ export default {
                                 {title: 'Alpha', correct: 0},
                                 {title: 'Beta', correct: 1},
                                 {title: 'Omega', correct: 1}
-                            ]
+                            ],
                         }
                     ]
                 }
@@ -151,7 +152,15 @@ export default {
             else{
                 router.delete(`/quiz/${this.currentQuiz.id}/option/${idx}`)
             }
-        }
+        },
+        save_image(img) {
+            router.post(`/img/quiz/${this.currentQuiz.id}/question/${this.currentQuiz.questions[this.selectedQuestion].id}`, {
+                'image' : img
+            })
+        },
+        delete_image() {
+            router.delete(`/img/quiz/${this.currentQuiz.id}/question/${this.currentQuiz.questions[this.selectedQuestion].id}`)
+        },
     },
     components: {
         Link, Modal, DeleteButton, ImageUpload
@@ -213,7 +222,7 @@ export default {
                     </p>
                     <input v-else v-model="currentQuiz.questions[selectedQuestion].title" ref="input" @keyup.enter="saveQuestionTitle" @blur="saveQuestionTitle" 
                         class="bg-gray-700 m-4 text-white text-4xl h-10 select-none"/>
-                    <ImageUpload class="p-4"/>
+                    <ImageUpload :imgUrl="currentQuiz.questions[selectedQuestion].image_path" @img-save="save_image" @img-delete="delete_image" class="p-4"/>
                     <div class="grid grid-cols-2 gap-4">
                         <div 
                             v-for="(option, index) in currentQuiz.questions[selectedQuestion].options" 
