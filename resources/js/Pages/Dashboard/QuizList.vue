@@ -2,6 +2,7 @@
 import { Link, useForm, router } from '@inertiajs/vue3';
 import QuizBar from './QuizBar.vue';
 import Modal from '../../Components/Modal.vue';
+import DeleteButton from '@/Components/DeleteButton.vue';
 
 export default {
     props : {
@@ -14,6 +15,8 @@ export default {
             currentQuizzes : [],
             deleteQuizConfirm: false,
             deleteQuizId: -1,
+            searchQuery : '',
+            searching: false
         }
     },
     mounted () {
@@ -35,6 +38,20 @@ export default {
             this.deleteQuizConfirm = false;
             this.deleteQuizId = -1;
         },
+        startSearch() {
+            this.searching = true
+            this.$nextTick(() => {
+                this.$refs.input.focus();
+                this.$refs.input.select();
+            })
+        },
+        stopSearch() {
+            this.searching = false
+        },
+        cancelSearch() {
+            this.searching = false
+            this.searchQuery = ''
+        }
     },
     computed: {
         deletingQuizName(){
@@ -42,11 +59,14 @@ export default {
                 if (this.currentQuizzes[i].id == this.deleteQuizId) return this.currentQuizzes[i].title;
             }
             return "not found :(";
+        },
+        filteredList() {
+            return this.currentQuizzes.filter(quiz => quiz.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
         }
     },
     components: {
-        Link, QuizBar, Modal
-    },
+        Link, QuizBar, DeleteButton, Modal
+    }
 
 }
 </script>
@@ -93,7 +113,19 @@ export default {
                 <div class="p-4 flex flex-row items-center border-b-2 border-gray-500">
                     <p class="text-xl text-white">My quizzes</p>
                     <div class="pl-7">
-                        <p class="text-white text-xl ">Search _____________________ </p>
+                        <p v-if="!searching && !searchQuery" class="cursor-pointer text-white text-xl " @click="startSearch">🔎 Search </p>
+                        <input v-else-if="searching" ref="input" v-model="searchQuery" @keyup.enter="stopSearch" @blur="stopSearch"/>
+                        <div v-else class="flex flex-row justify-center items-center">
+                            
+                            <p class="text-white text-xl cursor-pointer" @click="startSearch">🔎 {{ searchQuery }}</p>
+                            <DeleteButton @click="cancelSearch" />
+                            <!-- <button @click="cancelSearch" class="ml-4 inline-flex items-center justify-center w-6 h-6 bg-gray-200 rounded-full hover:bg-gray-500 focus:outline-none select-none">
+                                <svg class="w-4 h-4 text-gray-600" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button> -->
+                        </div>
+                        
                     </div>
                     <p class="pl-7 text-white text-xl">
                         <Link 
@@ -104,7 +136,7 @@ export default {
                     </p>
                 </div>
                 <div class="overflow-y-auto max-h-[70%]">
-                    <QuizBar @remove-quiz="removeQuizAsk" v-for="quiz in currentQuizzes" :key="quiz.id" :quiz="quiz"/>
+                    <QuizBar @remove-quiz="removeQuizAsk" v-for="quiz in filteredList" :key="quiz.id" :quiz="quiz"/>
                 </div>
             </div>
         </div>

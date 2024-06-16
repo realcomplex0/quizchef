@@ -13,9 +13,7 @@ class QuizListController extends Controller
     public function index() 
     {
         $user = Auth::user();
-        
         $quizzes = Quiz::where('user_id', $user->id)->get();
-        Log::Info($quizzes);
         return Inertia::render('Dashboard/QuizList', ['quizzes' => $quizzes]);
     }
     public function destroy($id)

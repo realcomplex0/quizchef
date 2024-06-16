@@ -4,9 +4,6 @@ import { router, Link } from '@inertiajs/vue3'
 
 export default {
     props: {
-        removeQuiz: {
-            type: function(){}
-        },
         quiz: {
             type: Object
         }
