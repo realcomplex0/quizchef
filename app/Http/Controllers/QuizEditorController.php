@@ -102,7 +102,7 @@ class QuizEditorController extends Controller
         $file = $request['image'];
         $filename = Str::random(40) . '.' . $file->extension();
         $file->storeAs('public/images', $filename);
-        $path = 'images/' . $filename;
+        $path = '/' . 'storage/images/' . $filename;
         $question = Question::findOrFail($question_id);
         $question->image_path = $path;
         $question->save();
