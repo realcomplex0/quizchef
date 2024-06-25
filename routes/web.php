@@ -34,9 +34,9 @@ Route::post('/img/quiz/{id}/question/{question_id}', [QuizEditorController::clas
 Route::delete('/img/quiz/{id}/question/{question_id}', [QuizEditorController::class, 'destroy_image'])->name('image.destroy');
 Route::post('/create-lobby', [LobbyController::class, 'create'])->name('create-lobby');
 Route::post('/join-lobby', [LobbyController::class, 'join'])->name('join-lobby');
+Route::post('/leave-lobby', [LobbyController::class, 'leave'])->name('leave-lobby');
 
-Route::get('/lobby', [LobbyController::class, 'hostView'])->name('lobby.host');
-Route::post('/lobby', [LobbyController::class, 'playerView'])->name('lobby.play');
+Route::get('/lobby', [LobbyController::class, 'playerView'])->name('lobby.play');
 
 Route::post('/start-game', [LobbyController::class, 'startGame'])->name('lobby.start');
 

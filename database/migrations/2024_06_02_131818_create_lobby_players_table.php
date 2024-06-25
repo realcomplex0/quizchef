@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('lobby_players', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("lobby_id");
+            $table->string('session_id');
             $table->string('nickname');
+            $table->boolean('is_host');
             $table->foreign('lobby_id')
                 ->references('id')
                 ->on('lobbies')
