@@ -143,8 +143,20 @@ class LobbyController extends Controller
         $data = $request->validate([
             'code' => 'required'
         ]);
-        event(new StartGame($data['code']));
+        $code = $data['code'];
         
+        $lobbies = Lobby::where('code', $code)->get();
+        if($lobbies->isEmpty()){
+            return Redirect::route('/');
+        }
+        $lobby_id = $lobbies[0]['id'];
+        $find_player = LobbyPlayer::query()->where('lobby_id', $lobby_id)->where('session_id', session('_token'))->get()->first();
+        
+        if ($find_player == null || !$find_player->is_host){
+            return Redirect::route('/');
+        }
+
+        event(new StartGame($data['code']));
         return Redirect::route('game.go')->with(['lobbyCode' => $data['code']]);
     }
 
