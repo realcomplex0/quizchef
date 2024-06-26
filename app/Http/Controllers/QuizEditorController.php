@@ -47,7 +47,6 @@ class QuizEditorController extends Controller
             $quiz = new Quiz();
             $quiz->user_id = $user_id;
             $quiz->plays = 0;
-            $quiz->questions = rand(0, 10);
         }
         else{
             $quiz = Quiz::findOrFail($id);
