@@ -53,6 +53,13 @@ html {
     @apply bg-red-700;
 }
 
+.btn-green-nh {
+    @apply bg-green-500 text-white rounded-md transition;
+}
+.btn-red-nh {
+    @apply bg-red-500 text-white rounded-md transition;
+}
+
 .landing-page-btn {
     @apply anchor-center left-1/2 text-3xl border-2 text-nowrap select-none
 }

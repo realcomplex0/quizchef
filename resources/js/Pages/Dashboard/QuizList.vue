@@ -103,7 +103,7 @@ export default {
                         :href="route('logout')" 
                         method="post"
                         as="button"
-                        class="ml-4 btn-red w-16 h-10 text-white border-2"
+                        class="ml-4 btn-red text-white border-2 p-3"
                         >
                         Log Out
                     </Link>

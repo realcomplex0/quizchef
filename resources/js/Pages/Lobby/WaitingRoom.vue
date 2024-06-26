@@ -1,6 +1,8 @@
 <script>
 import PlayerName from './PlayerName.vue';
 import {Link, router} from '@inertiajs/vue3';
+import QuizAnswer from './QuizAnswer.vue';
+import Echo from 'laravel-echo';
 
 export default {
     props : {
@@ -8,25 +10,39 @@ export default {
         title: String,
         players: Array,
         selected_player: Number,
-        is_host: Boolean,
+        is_host: Number,
     },
     data() {
         return {
-            displayPlayers : this.players
+            displayPlayers : this.players,
+            status : 0, // 0 - lobby, 1 - question, 2 - scoreboard, 3 - waiting for others,
+            currentQuestion : null,
+            currentOptions : null,
+            optionsAnswer : null,
         }
     },
     mounted() {
-        Echo.channel(`lobby.${this.lobbyCode}`)
+        window.Echo.channel(`lobby.${this.lobbyCode}`)
             .listen('JoinLobby', (event) => {
                 this.displayPlayers = event["player_list"];
             });
-        Echo.channel(`lobby.${this.lobbyCode}`)
+        window.Echo.channel(`lobby.${this.lobbyCode}`)
             .listen('StartGame', (event) => {
-                router.get('/game');
+                this.status = event["status"];
+                this.currentQuestion = event["question"];
+                this.currentOptions = event["options"];
+                this.optionsAnswers = null;
+                // this.displayPlayers = event["player_list"];
+            });
+        window.Echo.channel(`player.${this.selected_player}`)
+            .listen('UpdatePlayer', (event) => {
+                this.optionsAnswer = event['optionsAnswer'];
+                // console.log(this.optionsAnswer);
             });
     },
     unmounted(){
-        Echo.leave(`lobby.${this.lobbyCode}`);
+        window.Echo.leave(`lobby.${this.lobbyCode}`);
+        window.Echo.leave(`player.${this.selected_player}`);
     },
     methods: {
         startgame() {
@@ -38,20 +54,30 @@ export default {
             router.post('/leave-lobby', {
                 code : this.lobbyCode,
             })
+        },
+        processAnswer(index){
+            router.post('/submit-answer', {
+                code : this.lobbyCode,
+                answer_index : index
+            })
         }
     },
     computed: {
         playerCount(){
             if (this.displayPlayers.length == 0){
-                console.log(1);
                 this.leaveLobby();
             }
-            return this.displayPlayers.length;
+            let ret = '';
+            ret += this.displayPlayers.length;
+            ret += ' player'
+            if (this.displayPlayers.length != 1) ret += 's';
+            return ret;
         }
     },
     components: {
         Link,
-        PlayerName
+        PlayerName,
+        QuizAnswer,
     }
 }
 </script>
@@ -73,18 +99,29 @@ export default {
             </button>
         </div>
 
-        <div class="w-full p-2 flex space-between items-center justify-between">
-            <p class="p-10 text-white text-3xl">{{ playerCount }} players</p>
-            
-            <!-- <p class="select-none"></p> -->
-        </div>
-        <button v-if="is_host" @click="startgame" class="absolute btn-green w-1/2 left-1/2 bottom-10 border-white border-2 text-3xl" style="right:0%;height:100px;width:200px;transform:translateX(-50%)">
-            <p class="select-none">Start game</p>
-        </button>
-        <div class="grid grid-cols-6 gap-4 p-4">
-            <div v-for="player in displayPlayers" :key="player">
-                <PlayerName :player="player" :is_selected="(player.id == selected_player)" :is_host="player.is_host" />
+        <!-- Game lobby -->
+        <div v-if="status==0" class="absolute w-full" style="height:80%">
+            <div class="w-full h-16 absolute ">
+                <p class="text-white text-3xl text-mid">{{ playerCount }}</p>
+            </div>
+            <button v-if="is_host" @click="startgame" class="absolute btn-green w-1/2 left-1/2 bottom-0 border-white border-2 text-3xl" style="right:0%;height:100px;width:200px;transform:translateX(-50%)">
+                <p class="select-none">Start game</p>
+            </button>
+            <div class="grid grid-cols-4 gap-4 p-4 m-7 mt-20">
+                <div v-for="player in displayPlayers" :key="player">
+                    <PlayerName :player="player" :is_selected="(player.id == selected_player)" :is_host="player.is_host" />
+                </div>
             </div>
         </div>
+
+        <!-- Question -->
+        <QuizAnswer v-if="status==1" class="absolute w-full" style="height:80%" :question="currentQuestion" :options="currentOptions" :optionsAnswer="optionsAnswer" @selected="processAnswer"></QuizAnswer>
+
+        <!-- Scoreboard -->
+
+
+        <!-- Waiting for others -->
+
+
     </div>
 </template>

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('session_id');
             $table->string('nickname');
             $table->boolean('is_host');
+            $table->bigInteger("score");
             $table->foreign('lobby_id')
                 ->references('id')
                 ->on('lobbies')

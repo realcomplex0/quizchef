@@ -40,7 +40,7 @@ Route::get('/lobby', [LobbyController::class, 'playerView'])->name('lobby.play')
 
 Route::post('/start-game', [LobbyController::class, 'startGame'])->name('lobby.start');
 
-Route::get('/game', [LobbyController::class, 'gameView'])->name('game.go');
+Route::post('/submit-answer', [LobbyController::class, 'submitAnswer'])->name('lobby.submit');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
