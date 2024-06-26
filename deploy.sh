@@ -1,7 +1,9 @@
 #!/bin/bash
 
 cd /var/www/quizchef
-git pull origin main
+git stash
+git pull
+git stash pop
 npm run build
 php artisan route:cache
 php artisan config:cache
