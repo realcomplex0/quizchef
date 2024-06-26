@@ -3,6 +3,7 @@ import { Link, router } from '@inertiajs/vue3';
 import Modal from '../../Components/Modal.vue';
 import DeleteButton from '@/Components/DeleteButton.vue';
 import ImageUpload from './ImageUpload.vue';
+import TimerDropdown from './TimerDropdown.vue'
 
 export default {
     data () {
@@ -13,6 +14,7 @@ export default {
                 questions : [
                     {
                         title: 'Question 1',
+                        timer: 10,
                         options: [
                             {title: 'Alpha', correct: 0},
                             {title: 'Beta', correct: 1},
@@ -53,6 +55,7 @@ export default {
                     this.currentQuiz.questions = [
                         {
                             title: 'Question 1',
+                            timer: 10,
                             options: [
                                 {title: 'Alpha', correct: 0},
                                 {title: 'Beta', correct: 1},
@@ -126,6 +129,7 @@ export default {
         addQuestion() {
             this.currentQuiz.questions.push({
                 title: `Question ${this.currentQuiz.questions.length + 1}`,
+                timer: 20,
                 options: [
                     {title: 'Alpha', correct: 1},
                     {title: 'Beta', correct: 1},
@@ -153,7 +157,12 @@ export default {
                 router.delete(`/quiz/${this.currentQuiz.id}/option/${idx}`)
             }
         },
-        save_image(img) {
+        update_time(nTime) { 
+            this.currentQuiz.questions[this.selectedQuestion].timer = nTime
+            this.saveQuiz()
+        },
+        save_image(img, img_url) {
+            this.currentQuiz.questions[this.selectedQuestion].image_path = img_url
             router.post(`/img/quiz/${this.currentQuiz.id}/question/${this.currentQuiz.questions[this.selectedQuestion].id}`, {
                 'image' : img
             })
@@ -163,7 +172,7 @@ export default {
         },
     },
     components: {
-        Link, Modal, DeleteButton, ImageUpload
+        Link, Modal, DeleteButton, ImageUpload, TimerDropdown
     }
 
 }
@@ -222,6 +231,7 @@ export default {
                     </p>
                     <input v-else v-model="currentQuiz.questions[selectedQuestion].title" ref="input" @keyup.enter="saveQuestionTitle" @blur="saveQuestionTitle" 
                         class="bg-gray-700 m-4 text-white text-4xl h-10 select-none"/>
+                    <TimerDropdown @update="update_time" :time_limit="currentQuiz.questions[selectedQuestion].timer"/>
                     <ImageUpload :imgUrl="currentQuiz.questions[selectedQuestion].image_path" @img-save="save_image" @img-delete="delete_image" class="p-4"/>
                     <div class="grid grid-cols-2 gap-4">
                         <div 
@@ -236,7 +246,7 @@ export default {
                                 {{ option.title }}
                             </p>
                             <input v-else v-model="option.title" ref="options" @keyup.enter="saveOption" @blur="saveOption" class="text-blue-600"/>
-                            <DeleteButton @click="deleteOption(option.id)" class="mr-4"/>
+                            <DeleteButton @clicked="deleteOption(option.id)" class="mr-4"/>
                         </div>
                         <button v-if="currentQuiz.questions[selectedQuestion].options.length<8" @click="newOption" class="w-80 h-16 m-2 btn-green rounded-xl text-white border-2">
                             + New option

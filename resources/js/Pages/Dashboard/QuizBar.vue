@@ -28,7 +28,7 @@ export default {
     <div class="bg-light flex flex-row items-center justify-between border-2 border-white rounded-lg m-10">
         <p class="p-8 text-yellow-500 text-xl w-64"> {{ quiz.title }}</p>
         <div>
-            <p class="text-white text-xl"> {{quiz.questions}} questions</p>
+            <p class="text-white text-xl"> {{quiz.questions_count}} questions</p>
             <p class="text-white text-xl"> {{quiz.plays}} plays</p>
         </div>
         <div>

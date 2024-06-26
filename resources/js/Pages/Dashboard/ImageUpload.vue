@@ -25,17 +25,14 @@ export default {
             if (file) {
                 this.previewImage(file);
             }
-            this.saveImage(file)
         },
         previewImage(file) {
             const reader = new FileReader();
             reader.onload = (e) => {
                 this.currentImageUrl = e.target.result;
+                this.$emit('img-save', file, e.target.result)
             };
             reader.readAsDataURL(file);
-        },
-        saveImage (img) {
-            this.$emit('img-save', img)
         },
         removeImage() {
             this.currentImageUrl = null
@@ -64,7 +61,7 @@ export default {
     </div>
     <div v-else class="relative select-none">
         <img @click="logger" :src="currentImageUrl" alt="Uploaded Image" class="h-auto max-w-80 outline outline-4 outline-blue-500 rounded select-none"/>
-        <DeleteButton @click="removeImage" class="absolute top-2 left-2"/>
+        <DeleteButton @clicked="removeImage" class="absolute top-2 left-2"/>
     </div>
 </div>
 </template>

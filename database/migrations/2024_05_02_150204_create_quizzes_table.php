@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('plays');
-            $table->unsignedBigInteger('questions');
+            $table->unsignedBigInteger('plays')->default(0);
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')

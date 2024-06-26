@@ -2,7 +2,7 @@
 export default {
     methods: {
         clickButton() {
-            this.$emit('click')
+            this.$emit('clicked')
         }
     }
 }

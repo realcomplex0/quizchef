@@ -36,6 +36,7 @@ class QuizEditorController extends Controller
             'title' => 'required|string|max:255',
             'questions' => 'required|array|min:1|max:10',
             'questions.*.title' => 'required|string',
+            'questions.*.timer' => 'required|numeric|min:10|max:30',
             'questions.*.id' => 'numeric|min:0',
             'questions.*.options' => 'array|max:8',
             'questions.*.options.*.title' => 'required|string',
@@ -63,6 +64,7 @@ class QuizEditorController extends Controller
             $question->quiz_id = $quiz->id;
             $question->title = $questionObject['title'];
             $question->index = 0;
+            $question->timer = $questionObject['timer'];
             $question->save();
             foreach($questionObject['options'] as $optionObject) {
                 if(!isset($optionObject['id'])){

@@ -21,8 +21,7 @@ class QuizSeeder extends Seeder
             Quiz::create([
                 'title' => $faker->words(2,true),
                 'user_id' => $userID->random(),
-                'plays' => rand(0,10000),
-                'questions' => rand(0,77)
+                'plays' => rand(0,10000)
             ]);
         }
     }
