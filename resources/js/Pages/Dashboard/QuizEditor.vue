@@ -248,7 +248,7 @@ export default {
                     </div>
                     <div class="h-20">
                         <button class="btn-green border-2 text-white font-bold text-5xl m-4 w-16 h-16 rounded select-none transition scale-up " @click="addQuestion">
-                            <p class="pr-0.5 pb-1">+</p>
+                            <p class="pb-1">+</p>
                         </button>
                     </div>
                 </div>

@@ -88,6 +88,7 @@ const root = {
         notification: "Your answer has been submitted",
         game_ongoing: "The game is ongoing! Please wait for the next round!",
         please_wait: "Please wait until next round",
+        host_wait: "Please wait for the host to click continue!",
     }
 }
 

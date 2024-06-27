@@ -11,7 +11,9 @@
                 <p v-else class="text-center text-2xl text-green-500">{{ entry[1] }} - {{ entry[0] }} (+{{ entry[2] }})</p>
             </div>
         </div>
-        
+        <div v-if="!is_host" class="fixed w-full h-[10%] bottom-0 text-white text-response">
+            <p class="text-mid">{{ $global.lang.game.host_wait }}</p>
+        </div>
     </div>
 
 </template>
@@ -21,6 +23,9 @@ export default {
     props: {
         scoreboard: {
             default: null,
+        },
+        is_host: {
+            default : false,
         }
     },
     data() {
@@ -30,7 +35,6 @@ export default {
     },
     mounted() {
         // process results here
-        console.log(this.scoreboard);
         this.results = [];
         for (const i in this.scoreboard){
             this.results.push(this.scoreboard[i]);

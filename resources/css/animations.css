@@ -19,4 +19,9 @@
     animation-fill-mode: both;
 }
 
+.text-response {
+    animation: continue-button-frames 500ms cubic-bezier(.23,.46,.2,1) 0s;
+    animation-fill-mode: both;
+}
+
 /*  */

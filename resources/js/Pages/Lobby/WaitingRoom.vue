@@ -50,6 +50,7 @@ export default {
             });
         window.Echo.channel(`lobby.${this.lobbyCode}`)
             .listen('StartGame', (event) => {
+                this.checkedStill = 0;
                 // this.questionData.playerCount = this.players.length;
                 this.questionData.answerCount = 0;
                 this.questionData.optionsAnswer = null;
@@ -216,14 +217,14 @@ export default {
         <p v-if="checkedStill" class="text-white text-mid text-3xl">{{ $global.lang.game.game_ongoing }}</p>
 
         <!-- Question -->
-        <QuizAnswer v-if="status==1||status==2" class="absolute w-full" style="height:80%" :questionData="questionData" @selected="processAnswer"></QuizAnswer>
+        <QuizAnswer v-if="status==1||status==2" class="absolute w-full" style="height:80%" :is_host="is_host" :questionData="questionData" @selected="processAnswer"></QuizAnswer>
 
         <button v-if="is_host&&status==2" @click="goScoreboard" class="absolute continue-button btn-green right-[1.25%] bottom-[2.5%] border-white border-2 h-[10%] w-[10%]">
             <p class="select-none text-xl">{{$global.lang.game.continue}}</p>
         </button>
 
         <!-- Scoreboard -->
-        <Scoreboard v-if="status==3" class="absolute w-full" style="height:80%" :scoreboard="scoreboard"></Scoreboard>
+        <Scoreboard v-if="status==3" class="absolute w-full" style="height:80%" :scoreboard="scoreboard" :is_host="is_host"></Scoreboard>
 
         <button v-if="is_host&&status==3" @click="startGame" class="absolute continue-button btn-green right-[1.25%] bottom-[2.5%] border-white border-2 h-[10%] w-[10%]">
             <p class="select-none text-xl">{{$global.lang.game.continue}}</p>

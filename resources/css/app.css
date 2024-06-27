@@ -102,6 +102,9 @@ html {
 .scale-up2 {
     transform: scale(1.1);
 }
+.scale-up3 {
+    transform: scale(1.25);
+}
 
 .landing-page-btn {
     @apply anchor-center left-1/2 text-3xl border-2 text-nowrap select-none

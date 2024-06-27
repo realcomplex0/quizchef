@@ -6,8 +6,8 @@
         </div>
         <!-- answers -->
         <div class="absolute w-3/4 h-5/6 left-[12.5%] top-[16.66%] overflow-y-auto">
-            <div v-for="(entry, index) in this.results" :key="index">
-                <p v-if="entry[2]==0" class="text-center text-2xl " :style="{ 'font-size': calcSize(index+1) + 'px', 'color' : calcColor(index+1)}" :class="{ 'pt-5' : ((index+1) <= 2), 'pt-2' : ((index+1) == 3), 'pt-1' : ((index+1) == 4)}">{{index+1}}. {{ entry[1] }} - {{ entry[0] }}</p>
+            <div v-for="(entry, index) in results" :key="index">
+                <p class="text-center text-2xl " :style="{ 'font-size': calcSize(index+1) + 'px', 'color' : calcColor(index+1)}" :class="{ 'pt-5' : ((index+1) <= 2), 'pt-2' : ((index+1) == 3), 'pt-1' : ((index+1) == 4)}">{{index+1}}. {{ entry[1] }} - {{ entry[0] }}</p>
             </div>
         </div>
         
@@ -20,22 +20,6 @@ export default {
         scoreboard: {
             default: null,
         }
-    },
-    data() {
-        return {
-            results: null,
-        }
-    },
-    mounted() {
-        
-        // process results here
-        this.results = [];
-        for (const i in this.scoreboard){
-            this.results.push(this.scoreboard[i]);
-        }
-        this.results.sort();
-        this.results.reverse();
-        console.log(this.results);
     },
     methods: {
         calcSize(index){
@@ -51,6 +35,22 @@ export default {
             if (index == 2) return 'silver';
             if (index == 3) return '#CD7F32';
             return 'white';
+        }
+    },
+    computed: {
+        results(){
+            let res = [];
+            let cnt = 0;
+            for (const i in this.scoreboard){
+                res.push([]);
+                for (const j in this.scoreboard[i]){
+                    res[cnt].push(this.scoreboard[i][j]);
+                }
+                cnt += 1;
+            }
+            res.sort();
+            res.reverse();
+            return res;
         }
     }
 }

@@ -88,6 +88,7 @@ const root = {
         notification: "Tava atbilde ir iesniegta",
         game_ongoing: "Spēle šobrīd iet! Lūdzu uzgaidiet līdz nākamajam raundam!",
         please_wait: "Lūdzu uzgaidiet līdz nākamajam raundam",
+        host_wait: "Lūdzu uzgaidīt kamēr līderis uzspiež turpināt!",
     }
 }
 
