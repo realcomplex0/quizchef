@@ -3,6 +3,7 @@ import { Link, useForm, router } from '@inertiajs/vue3';
 import QuizBar from './QuizBar.vue';
 import Modal from '../../Components/Modal.vue';
 import DeleteButton from '@/Components/DeleteButton.vue';
+import SettingsModal from '@/Components/SettingsModal.vue';
 
 export default {
     props : {
@@ -18,7 +19,8 @@ export default {
             toggleFavoriteQuizId: -1,
             deleteQuizId: -1,
             searchQuery : '',
-            searching: false
+            searching: false,
+            settingsOpen: false,
         }
     },
     mounted () {
@@ -116,13 +118,17 @@ export default {
         },
     },
     components: {
-        Link, QuizBar, DeleteButton, Modal
+        Link, QuizBar, DeleteButton, Modal, SettingsModal,
     }
 
 }
 </script>
 
 <template>
+    <button @click="settingsOpen=true" class="fixed bottom-4 left-4 h-16 w-16 z-10">
+        <img class="select-none" src="../../../../public/assets/img/SettingsCog.png" draggable="false">
+    </button>
+    <SettingsModal :isOpen="settingsOpen" @close="settingsOpen=false"/>
     <!-- modal for deleting quiz -->
     <Modal :isOpen="deleteQuizConfirm" @close="deleteQuizConfirm=false" :height="'9rem'" :width="'25%'" class="">
         <div class="absolute w-full h-12 text-white border-b text-nowrap"> 
@@ -199,9 +205,9 @@ export default {
                             New Quiz
                         </Link>
                     </p>
-                    <p class="pl-7 text-white text-xl">
+                    <div class="pl-7 text-white text-xl">
                         <p> Browse</p>
-                    </p>
+                    </div>
                 </div>
 
                 <p class="text-yellow-500 p-4 text-xl">Favorites</p>

@@ -4,7 +4,7 @@
         <p class="absolute text-6xl text-white font-bold anchor-center left-1/2 select-none" style="top:10%">QuizChef</p>
         
         <!-- Settings -->
-        <button @click="settingsOpen=true" class="absolute w-16 h-16 right-5 top-5">
+        <button @click="settingsOpen=true" class="fixed bottom-4 left-4 h-16 w-16 z-10">
             <img class="select-none" src="../../../public/assets/img/SettingsCog.png" draggable="false">
         </button>
         <SettingsModal :isOpen="settingsOpen" @close="settingsOpen=false"/>
@@ -91,7 +91,6 @@ export default {
         Link,
         SettingsModal,
     },
-
     props: {
         canLogin: {
             type: Boolean,

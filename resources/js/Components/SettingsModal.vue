@@ -16,13 +16,21 @@
                 </button>
 
                 <!-- Title -->
-                <div class="absolute h-24 w-full pointer-events-none border-b ">
+                <div class="absolute h-24 w-full pointer-events-none border-b-2 ">
                     <p class="text-mid text-4xl font-bold">{{ $global.lang.settingsModal.settings }}</p>
                 </div>
 
                 <!-- TODO: Main Section Main Section :) -->
-                <button @click="$global.settings.language = 'lv'" class="btn-green p-10">lv</button>
-                <button @click="$global.settings.language = 'en'" class="btn-green p-10">en</button>
+                <div class="absolute top-24 w-full h-24 border-b">
+                    <div class="absolute w-3/4 h-full">
+                        <p class="text-white text-2xl pl-10 absolute top-1/2" style="transform: translateY(-50%);">Language: </p>
+                    </div>
+                    <div class="absolute w-1/4 h-full left-3/4 flex justify-evenly items-center border-l">
+                        <button @click="$global.settings.language = 'lv'" class="w-2/5 h-1/2 border-2 text-xl" :class="{ 'btn-gray' : ($global.settings.language != 'lv'), 'btn-green' : ($global.settings.language == 'lv')}">LV</button>
+                        <button @click="$global.settings.language = 'en'" class="w-2/5 h-1/2 border-2 text-xl" :class="{ 'btn-gray' : ($global.settings.language != 'en'), 'btn-green' : ($global.settings.language == 'en')}">EN</button>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </Transition>

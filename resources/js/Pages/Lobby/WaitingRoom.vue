@@ -3,6 +3,7 @@ import PlayerName from './PlayerName.vue';
 import {Link, router} from '@inertiajs/vue3';
 import QuizAnswer from './QuizAnswer.vue';
 import Scoreboard from './Scoreboard.vue';
+import SettingsModal from '@/Components/SettingsModal.vue';
 import Echo from 'laravel-echo';
 
 export default {
@@ -28,6 +29,7 @@ export default {
             },
             timerInterval: null,
             scoreboard: null,
+            settingsOpen: false,
         }
     },
     mounted() {
@@ -147,12 +149,17 @@ export default {
         PlayerName,
         QuizAnswer,
         Scoreboard,
+        SettingsModal,
     }
 }
 </script>
 
 <template>
     <div class="absolute w-full h-full">
+        <SettingsModal :isOpen="settingsOpen" @close="settingsOpen=false"/>
+        <button @click="settingsOpen=true" class="fixed bottom-4 left-4 h-16 w-16 z-10">
+            <img class="select-none" src="../../../../public/assets/img/SettingsCog.png" draggable="false">
+        </button>
         <div class="p-6 bg-light flex space-between items-center justify-between border-b-2 border-white">
             <p class="text-5xl text-white font-bold select-none">
                 <button @click="leaveLobby">
@@ -163,7 +170,7 @@ export default {
                 <p class= "text-white text-2xl"> Title: {{ title }}</p>
                 <p class= "text-red-500 text-2xl"> Code: {{ lobbyCode }}</p>
             </div>
-            <button @click="leaveLobby" class="btn-red text-white border-2 p-3">
+            <button @click="leaveLobby" class="btn-red text-white border-2 p-3 pb-3">
                 <p class="select-none">Leave lobby</p>
             </button>
         </div>

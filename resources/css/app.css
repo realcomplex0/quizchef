@@ -53,6 +53,14 @@ html {
     @apply bg-red-700;
 }
 
+.btn-gray {
+    background-color: var(--main-bg-color-light);
+    @apply text-white rounded-md transition;
+}
+.btn-gray:hover {
+    background-color: var(--main-bg-color);
+}
+
 .btn-green-nh {
     @apply bg-green-500 text-white rounded-md transition pointer-events-none;
 }

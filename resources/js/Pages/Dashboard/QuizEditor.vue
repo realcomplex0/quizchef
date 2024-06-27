@@ -5,6 +5,7 @@ import DeleteButton from '@/Components/DeleteButton.vue';
 import ImageUpload from './ImageUpload.vue';
 import TimerDropdown from './TimerDropdown.vue'
 import PrivacyToggle from './PrivacyToggle.vue'
+import SettingsModal from '@/Components/SettingsModal.vue';
 
 export default {
     data () {
@@ -33,6 +34,7 @@ export default {
             curImg: 'test',
             isEditingQuestionTitle: false,
             deleteSelectedQuestionConfirm: false,
+            settingsOpen: false,
         }
     },
     props : {
@@ -190,13 +192,17 @@ export default {
         }
     },
     components: {
-        Link, Modal, DeleteButton, ImageUpload, TimerDropdown, PrivacyToggle
+        Link, Modal, DeleteButton, ImageUpload, TimerDropdown, PrivacyToggle, SettingsModal,
     }
 
 }
 </script>
 
 <template>
+    <SettingsModal :isOpen="settingsOpen" @close="settingsOpen=false"/>
+    <button @click="settingsOpen=true" class="fixed bottom-4 left-4 h-16 w-16 z-10">
+        <img class="select-none" src="../../../../public/assets/img/SettingsCog.png" draggable="false">
+    </button>
     <!-- Modal for deleting questions -->
     <Modal :isOpen="deleteSelectedQuestionConfirm" @close="deleteSelectedQuestionConfirm=false" :height="'9rem'" :width="'25%'" class="">
         <div class="absolute w-full h-12 text-white border-b text-nowrap"> 
