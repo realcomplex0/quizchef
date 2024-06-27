@@ -222,6 +222,8 @@ class LobbyController extends Controller
                 event(new StartGame($data['code'], 1, $nxt_question));
             } else {
                 if ($nxt_question == -1) return Redirect::route('/');
+                // end of game
+                Quiz::query()->where('id', $info['quiz']['id'])->increment('plays', 1);
                 event(new UpdateLobby($data['code'], 3, ''));
             }
         }
