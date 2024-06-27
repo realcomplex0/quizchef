@@ -86,7 +86,7 @@ export default {
                     <DeleteButton @clicked="cancelSearch" />
                 </div>
             </div>
-            <div>
+            <div class="h-auto overflow-y-scroll">
                 <PublicQuizBar v-for="quiz in orderByPopular" :key="quiz.id" :quiz="quiz"/>
             </div>
         </div>
