@@ -2,7 +2,7 @@
     <div class="w-full h-full absolute">
         <!-- question title -->
         <div class="absolute w-3/4 h-1/6 left-[12.5%] text-white">
-            <p class="text-4xl text-mid select-none">Scoreboard</p>
+            <p class="text-4xl text-mid select-none"> {{ $global.lang.game.scoreboard }}</p>
         </div>
         <!-- answers -->
         <div class="absolute w-3/4 h-5/6 left-[12.5%] top-[16.66%] overflow-y-auto">

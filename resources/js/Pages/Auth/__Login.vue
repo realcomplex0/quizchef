@@ -37,17 +37,17 @@ export default {
             </p>
             <form @submit.prevent="submit" class="flex flex-col border-2 rounded-lg w-5/12 bg-light p-10 mt-8">
                 <label for="email" class="text-white">
-                    E-Mail
+                    {{ $global.lang.loginPage.email }}
                 </label>
                 <input id="email" v-model="form.email" class="bg-light text-white border-white border-2 rounded-lg"/>
                 <label for="password" class="mt-6 text-white">
-                    Password
+                    {{ $global.lang.loginPage.password }}
                 </label>
                 <input type="password" id="password" v-model="form.password" class="bg-light text-white border-white border-2 rounded-lg"/>
                 <div class="mt-10 flex flex-row items-center justify-between">
-                    <p class="text-white">Forgot password?</p>
+                    <p class="text-white">{{ $global.lang.loginPage.forgotPassword }}</p>
                     <button type="submit" class="btn-green w-44 h-10 text-white border-2">
-                        {{ $global.lang.generic.logIn }}
+                        {{ $global.lang.loginPage.login }}
                     </button>
                 </div>
             </form>

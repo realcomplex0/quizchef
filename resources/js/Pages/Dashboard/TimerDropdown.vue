@@ -40,7 +40,7 @@ export default {
 </script>
 <template>
     <div>
-        <label for="selectTimer" class="text-red-500 text-xl"> 🕒Time Limit: </label>
+        <label for="selectTimer" class="text-red-500 text-xl"> 🕒{{this.$global.lang.editQuiz.timeLimit}}: </label>
         <select id="selectTimer" v-model="selectedOption" @change="changeOption">
             <option v-for="option in options" :key="option.value" :value="option.value">
                 {{ option.text }}

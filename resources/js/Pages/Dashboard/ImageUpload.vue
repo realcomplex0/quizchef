@@ -48,8 +48,8 @@ export default {
 <template>
 <div>
     <button v-if="!currentImageUrl" class="h-40 w-80 border-4 border-dotted rounded-xl flex items-center justify-center flex-col" @click="openFileInput">
-        <p class="text-2xl text-red-500">Upload your image here </p>
-        <p class="text-red-500">Max.file size: 5MB</p>
+        <p class="text-2xl text-red-500">{{ $global.lang.editQuiz.uploadImage}} </p>
+        <p class="text-red-500">{{ $global.lang.editQuiz.maxSize}}</p>
         <input
             id="file-upload"
             type="file"

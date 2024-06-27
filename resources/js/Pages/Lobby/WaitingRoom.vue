@@ -137,11 +137,7 @@ export default {
             if (this.displayPlayers.length == 0){
                 this.leaveLobby();
             }
-            let ret = '';
-            ret += this.displayPlayers.length;
-            ret += ' player'
-            if (this.displayPlayers.length != 1) ret += 's';
-            return ret;
+            return this.displayPlayers.length;
         }
     },
     components: {
@@ -167,21 +163,21 @@ export default {
                 </button>
             </p>
             <div class="absolute left-1/2" style="transform:translateX(-50%)">
-                <p class= "text-white text-2xl"> Title: {{ title }}</p>
-                <p class= "text-red-500 text-2xl"> Code: {{ lobbyCode }}</p>
+                <p class= "text-white text-2xl"> {{ title }}</p>
+                <p class= "text-red-500 text-2xl"> {{$global.lang.game.code}}: {{ lobbyCode }}</p>
             </div>
             <button @click="leaveLobby" class="btn-red text-white border-2 p-3">
-                <p class="select-none">Leave lobby</p>
+                <p class="select-none">{{ $global.lang.game.leave_lobby }}</p>
             </button>
         </div>
 
         <!-- Game lobby -->
         <div v-if="status==0" class="absolute w-full" style="height:80%">
             <div class="w-full h-16 absolute ">
-                <p class="text-white text-3xl text-mid">{{ playerCount }}</p>
+                <p class="text-white text-3xl text-mid">{{ playerCount }} {{$global.lang.game.players}}</p>
             </div>
             <button v-if="is_host" @click="startGame" class="absolute btn-green left-1/2 bottom-0 border-white border-2 text-3xl" style="height:100px;width:200px;transform:translateX(-50%)">
-                <p class="select-none">Start game</p>
+                <p class="select-none">{{$global.lang.game.start_game}} </p>
             </button>
             <div class="grid grid-cols-4 gap-4 p-4 m-7 mt-20">
                 <div v-for="player in displayPlayers" :key="player">
@@ -194,14 +190,14 @@ export default {
         <QuizAnswer v-if="status==1||status==2" class="absolute w-full" style="height:80%" :questionData="questionData" @selected="processAnswer"></QuizAnswer>
 
         <button v-if="is_host&&status==2" @click="goScoreboard" class="absolute btn-green right-[1.25%] bottom-[2.5%] border-white border-2 h-[10%] w-[10%]">
-            <p class="select-none text-xl">Continue</p>
+            <p class="select-none text-xl">{{$global.lang.game.continue}}</p>
         </button>
 
         <!-- Scoreboard -->
         <Scoreboard v-if="status==3" class="absolute w-full" style="height:80%" :scoreboard="scoreboard"></Scoreboard>
 
         <button v-if="is_host&&status==3" @click="startGame" class="absolute btn-green right-[1.25%] bottom-[2.5%] border-white border-2 h-[10%] w-[10%]">
-            <p class="select-none text-xl">Continue</p>
+            <p class="select-none text-xl">{{$global.lang.game.continue}}</p>
         </button>
 
         <!-- Final standings -->

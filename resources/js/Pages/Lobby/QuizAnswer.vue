@@ -19,11 +19,11 @@
         <!-- timer and player counts -->
         <div class="absolute w-[12.5%] top-[8.33%] h-1/6 right-0  flex flex-col justify-around items-center">
             <p class="text-white text-7xl select-none">{{ questionData.timeRemaining }}</p>
-            <p class="text-white select-none">{{ questionData.answerCount }}/{{ questionData.playerCount }} answered</p>
+            <p class="text-white select-none">{{ questionData.answerCount }}/{{ questionData.playerCount }} {{$global.lang.game.players}} {{$global.lang.game.answered}} </p>
         </div>
         <!-- answer confirmation -->
         <div v-if="questionData.confirmedAnswer!=null && questionData.optionsAnswer==null" class="fixed w-full h-[10%] bottom-0 text-white">
-            <p class="text-mid">Your answer has been submitted! (please wait for the other players to finish answering!)</p>
+            <p class="text-mid">{{$global.lang.game.notification}}</p>
         </div>
     </div>
 </template>

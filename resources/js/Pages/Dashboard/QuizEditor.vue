@@ -12,17 +12,18 @@ export default {
         return {
             currentQuiz: {
                 plays: 0,
-                title: 'Untitled Quiz',
+                title: this.$global.lang.defaultQuiz.title,
                 favorite: false,
                 public: 0,
                 questions : [
                     {
-                        title: 'Question 1',
+                        title: `${this.$global.lang.defaultQuiz.question} 1`,
                         timer: 30,
                         options: [
-                            {title: 'Alpha', correct: 0},
-                            {title: 'Beta', correct: 1},
-                            {title: 'Omega', correct: 1}
+                            {title: this.$global.lang.defaultQuiz.optionA, correct: 0},
+                            {title: this.$global.lang.defaultQuiz.optionB, correct: 1},
+                            {title: this.$global.lang.defaultQuiz.optionC, correct: 1},
+                            {title: this.$global.lang.defaultQuiz.optionD, correct: 1}
                         ]
                     }
                 ]
@@ -59,12 +60,13 @@ export default {
                     this.defaultQuestions = true
                     this.currentQuiz.questions = [
                         {
-                            title: 'Question 1',
+                            title: `${this.$global.lang.defaultQuiz.question} 1`,
                             timer: 30,
                             options: [
-                                {title: 'Alpha', correct: 0},
-                                {title: 'Beta', correct: 1},
-                                {title: 'Omega', correct: 1}
+                                {title: this.$global.lang.defaultQuiz.optionA, correct: 0},
+                                {title: this.$global.lang.defaultQuiz.optionB, correct: 1},
+                                {title: this.$global.lang.defaultQuiz.optionC, correct: 1},
+                                {title: this.$global.lang.defaultQuiz.optionD, correct: 1}
                             ],
                         }
                     ]
@@ -133,13 +135,13 @@ export default {
         },
         addQuestion() {
             this.currentQuiz.questions.push({
-                title: `Question ${this.currentQuiz.questions.length + 1}`,
+                title: `${this.$global.lang.defaultQuiz.question} ${this.currentQuiz.questions.length + 1}`,
                 timer: 30,
                 options: [
-                    {title: 'Alpha', correct: 1},
-                    {title: 'Beta', correct: 1},
-                    {title: 'Omega', correct: 0},
-                    {title: 'Omicron', correct: 1}
+                    {title: this.$global.lang.defaultQuiz.optionA, correct: 0},
+                    {title: this.$global.lang.defaultQuiz.optionB, correct: 1},
+                    {title: this.$global.lang.defaultQuiz.optionC, correct: 1},
+                    {title: this.$global.lang.defaultQuiz.optionD, correct: 1}
                 ]
             })
             this.selectedQuestion = this.currentQuiz.questions.length - 1
@@ -148,7 +150,7 @@ export default {
         newOption() {
             if (this.currentQuiz.questions[this.selectedQuestion].options.length >= 8) return
             this.currentQuiz.questions[this.selectedQuestion].options.push({
-                title : 'Untitled Answer',
+                title : this.$global.lang.defaultQuiz.option,
                 correct : 0
             })
             this.saveQuiz()
@@ -206,14 +208,14 @@ export default {
     <!-- Modal for deleting questions -->
     <Modal :isOpen="deleteSelectedQuestionConfirm" @close="deleteSelectedQuestionConfirm=false" :height="'9rem'" :width="'25%'" class="">
         <div class="absolute w-full h-12 text-white border-b text-nowrap"> 
-            <p class="text-mid text-l">Delete Question {{ selectedQuestion+1 }}?</p>
+            <p class="text-mid text-l">{{$global.lang.editQuiz.delete}} {{ selectedQuestion+1 }}?</p>
         </div>
         <div class="absolute flex w-full h-12 bottom-6 justify-around">
             <button @click="deleteSelectedQuestion" class="btn-red text-white border-2 p-3 w-1/3">
-                Delete
+                {{$global.lang.dashboard.delete}}
             </button>
             <button @click="deleteSelectedQuestionConfirm=false" class="btn-blue text-white border-2 p-3 w-1/3">
-                Cancel
+                {{$global.lang.dashboard.cancel}}
             </button>
         </div>
     </Modal>
@@ -274,13 +276,13 @@ export default {
                             <DeleteButton @clicked="deleteOption(option.id)" class="mr-4"/>
                         </div>
                         <button v-if="currentQuiz.questions[selectedQuestion].options.length<8" @click="newOption" class="w-80 h-16 m-2 btn-green rounded-xl text-white border-2">
-                            + New option
+                            {{$global.lang.editQuiz.newOption}}
                         </button>
                     </div>
                 </div>
                 <div>
                     <button @click="deleteSelectedQuestionAsk" class="mt-16 mr-8 btn-red w-48 h-12 text-white border-2">
-                        Delete question
+                        {{$global.lang.editQuiz.delete}}
                     </button>
                 </div>
             </div>

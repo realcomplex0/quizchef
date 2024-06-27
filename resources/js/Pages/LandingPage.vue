@@ -15,6 +15,9 @@
                 <p class="text-mid text-white text-nowrap text-xl select-none">{{ $global.lang.landingPage.aboutUs }}</p>
             </button>
             <div class="absolute bg-light border-2 rounded-lg w-full pointer-events-auto overflow-hidden" style="height:71.5%;top:28.5%">
+                <a target="_blank" href="https://github.com/realcomplex0/quizchef">    
+                    <img class="select-none h-10 w-10 p-2" src="../../../public/assets/img/GitIcon.png">
+                </a>
                 <p class="absolute text-white left-1/2 anchor-center" style="top:40%;width:90%">
                     {{ $global.lang.landingPage.aboutUsText }}
                 </p>
@@ -57,7 +60,7 @@
                 :href="route('login')"
                 class="btn-green absolute landing-page-btn" style="top:35%;height:20%;width:75%"
             >
-                <p class="text-mid"> Dashboard </p>
+                <p class="text-mid"> {{ $global.lang.landingPage.dashboard}} </p>
             </Link>
         </div>
 
@@ -71,8 +74,8 @@
             <!-- TODO: room code text box -->
 
             <!-- Go to room button "Cook" -->
-            <input id="code" placeholder="Code" v-model="join_code" class="absolute bg-light text-white border-white border-2 landing-page-btn rounded-lg" style="top:15%;height:20%;width:75%"/>
-            <input id="code" placeholder="Name" v-model="join_name" class="absolute bg-light text-white border-white border-2 landing-page-btn rounded-lg" style="top:40%;height:20%;width:75%"/>
+            <input id="code" :placeholder="$global.lang.landingPage.code" v-model="join_code" class="absolute bg-light text-white border-white border-2 landing-page-btn rounded-lg" style="top:15%;height:20%;width:75%"/>
+            <input id="code" :placeholder="$global.lang.landingPage.name" v-model="join_name" class="absolute bg-light text-white border-white border-2 landing-page-btn rounded-lg" style="top:40%;height:20%;width:75%"/>
             <button @click="joinGame"
                 class="btn-green absolute landing-page-btn" style="top:75%;height:20%;width:75%"
             >
@@ -120,7 +123,6 @@ export default {
             settingsOpen: false,
         }
     },
-
     methods: {
         joinGame() {
             router.post('/join-lobby', {

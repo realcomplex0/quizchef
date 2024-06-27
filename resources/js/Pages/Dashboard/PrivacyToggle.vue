@@ -31,8 +31,8 @@ export default {
         <button @click="togglePrivacy"
                 :class="{ 'bg-blue-700 hover:bg-blue-800': isPublic, 'bg-gray-500 hover:bg-gray-400': !isPublic }"
                 class="text-white font-bold h-10 w-60  rounded focus:outline-none transition-colors duration-300">
-            <span v-if="!isPublic">🔒Your Quiz Is private</span>
-            <span v-else="isPublic">🌐Your Quiz is public</span>
+            <span v-if="!isPublic">🔒{{ $global.lang.editQuiz.private }}</span>
+            <span v-else="isPublic">🌐{{ $global.lang.editQuiz.public }}</span>
         </button>
     </div>
 </template>

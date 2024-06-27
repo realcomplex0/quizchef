@@ -31,21 +31,21 @@ export default {
     <div class="bg-light flex flex-row items-center justify-between border-2 border-white rounded-lg mb-4 ml-28 mr-28">
         <p class="p-6 text-yellow-500 text-lg w-64"> {{ quiz.title }}</p>
         <div>
-            <p class="text-white text-lg"> {{quiz.questions_count}} questions</p>
-            <p class="text-white text-lg"> {{quiz.plays}} plays</p>
+            <p class="text-white text-lg"> {{quiz.questions_count}} {{ $global.lang.dashboard.questions }}</p>
+            <p class="text-white text-lg"> {{quiz.plays}} {{ $global.lang.dashboard.plays }}</p>
         </div>
         <div class="flex flex-row items-center">
             <button @click="startGame" class="mr-4 btn-green w-20 h-10 text-white border-2">
-                Play
+                {{ $global.lang.dashboard.play }}
             </button>
             <Link
                 :href="route('quiz.view', { id : quiz.id })">
                 <button class="mr-4 btn-blue w-20 h-10 text-white border-2">
-                    Edit
+                    {{ $global.lang.dashboard.edit }}
                 </button>
             </Link>
             <button @click="deleteQuiz" class="mr-4 btn-red w-20 h-10 text-white border-2">
-                Delete
+                {{ $global.lang.dashboard.delete }}
             </button>
             <button @click="toggleFavorite">
                 <img v-if="quiz.favorite" class="select-none w-4 h-4 mr-4" src="../../../../public/assets/img/ActiveFavorite.png" draggable="false">

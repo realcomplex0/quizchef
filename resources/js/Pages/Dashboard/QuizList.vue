@@ -101,9 +101,9 @@ export default {
         },
         toggleFavoriteOperation() {
             if(this.currentQuizzes.find(quiz => quiz.id == this.toggleFavoriteQuizId).favorite)
-                return 'Remove from favorites: '
+                return this.$global.lang.dashboard.removeFavorite
             else
-                return 'Add to favorites: '
+                return this.$global.lang.dashboard.addFavorite
         },
         filteredList() {
             return this.currentQuizzes.filter(quiz => quiz.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
@@ -132,14 +132,14 @@ export default {
     <!-- modal for deleting quiz -->
     <Modal :isOpen="deleteQuizConfirm" @close="deleteQuizConfirm=false" :height="'9rem'" :width="'25%'" class="">
         <div class="absolute w-full h-12 text-white border-b text-nowrap"> 
-            <p class="text-mid text-l">Delete Quiz "{{ deletingQuizName }}"?</p>
+            <p class="text-mid text-l">{{ $global.lang.dashboard.deleteQuiz }} "{{ deletingQuizName }}"?</p>
         </div>
         <div class="absolute flex w-full h-12 bottom-6 justify-around">
             <button @click="removeQuiz(deleteQuizId)" class="btn-red text-white border-2 p-3 w-1/3">
-                Delete
+                {{ $global.lang.dashboard.delete }}
             </button>
             <button @click="disarmDelete" class="btn-blue text-white border-2 p-3 w-1/3">
-                Cancel
+                {{ $global.lang.dashboard.cancel }}
             </button>
         </div>
     </Modal>
@@ -150,10 +150,10 @@ export default {
         </div>
         <div class="absolute flex w-full h-12 bottom-6 justify-around">
             <button @click="triggerToggleFavorite" class="btn-green text-white border-2 p-3 w-1/3">
-                Confirm
+                {{ $global.lang.dashboard.confirm }}
             </button>
             <button @click="disarmToggleFavorite" class="btn-blue text-white border-2 p-3 w-1/3">
-                Cancel
+                {{ $global.lang.dashboard.cancel }}
             </button>
         </div>
     </Modal>
@@ -176,15 +176,15 @@ export default {
                         as="button"
                         class="ml-4 btn-red text-white border-2 p-1"
                         >
-                        Log Out
+                        {{$global.lang.dashboard.logout}}
                     </Link>
                 </div>
             </div>
             <div class="p-2 flex flex-col h-full">
                 <div class="p-3 flex flex-row items-center border-b-2 border-gray-500">
-                    <p class="text-xl text-white">My quizzes</p>
+                    <p class="text-xl text-white">{{ $global.lang.dashboard.myQuizzes }}</p>
                     <div class="pl-7">
-                        <p v-if="!searching && !searchQuery" class="cursor-pointer text-white text-xl " @click="startSearch">🔎 Search </p>
+                        <p v-if="!searching && !searchQuery" class="cursor-pointer text-white text-xl " @click="startSearch">🔎 {{ $global.lang.dashboard.search }} </p>
                         <input v-else-if="searching" ref="input" v-model="searchQuery" @keyup.enter="stopSearch" @blur="stopSearch"/>
                         <div v-else class="flex flex-row justify-center items-center">
                             
@@ -202,20 +202,20 @@ export default {
                         <Link 
                             :href="route('quiz.view')" 
                         >
-                            New Quiz
+                            {{ $global.lang.dashboard.newQuiz }}
                         </Link>
                     </p>
                     <div class="pl-7 text-white text-xl">
-                        <p> Browse</p>
+                        <p> {{ $global.lang.dashboard.browse }}</p>
                     </div>
                 </div>
 
-                <p class="text-yellow-500 p-4 text-xl">Favorites</p>
+                <p class="text-yellow-500 p-4 text-xl">{{ $global.lang.dashboard.favorites }}</p>
                 <div class="overflow-y-auto max-h-[25vh]">
                     <QuizBar @toggle-favorite="onToggleFavorite" @remove-quiz="removeQuizAsk" v-for="quiz in favoriteList" :key="quiz.id" :quiz="quiz"/>
                 </div>
                 <div>
-                <p class="text-yellow-500 p-4 text-xl">Recents</p>
+                <p class="text-yellow-500 p-4 text-xl">{{ $global.lang.dashboard.recents }}</p>
                 </div>
                 <div class="overflow-y-auto max-h-[40vh]">
                     <QuizBar @toggle-favorite="onToggleFavorite" @remove-quiz="removeQuizAsk" v-for="quiz in recentList" :key="quiz.id" :quiz="quiz"/>
