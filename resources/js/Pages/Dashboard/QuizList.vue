@@ -222,7 +222,7 @@ export default {
                 <div>
                 <p class="text-yellow-500 p-4 text-xl">{{ $global.lang.dashboard.recents }}</p>
                 </div>
-                <div class="overflow-y-auto max-h-[35vh]">
+                <div class="h-auto overflow-y-scroll max-h-[35vh] flex flex-col">
                     <QuizBar @toggle-favorite="onToggleFavorite" @remove-quiz="removeQuizAsk" v-for="quiz in recentList" :key="quiz.id" :quiz="quiz"/>
                 </div>
             </div>
