@@ -54,10 +54,10 @@ html {
 }
 
 .btn-green-nh {
-    @apply bg-green-500 text-white rounded-md transition;
+    @apply bg-green-500 text-white rounded-md transition pointer-events-none;
 }
 .btn-red-nh {
-    @apply bg-red-500 text-white rounded-md transition;
+    @apply bg-red-500 text-white rounded-md transition pointer-events-none;
 }
 
 .landing-page-btn {

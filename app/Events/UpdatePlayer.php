@@ -9,26 +9,24 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Option;
 
 class UpdatePlayer implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     private $id;
-    public $optionsAnswer;
+    public $op;
+    public $info;
     /**
      * Create a new event instance.
      */
-    public function __construct($id, $question)
+    public function __construct($id, $op, $data)
     {   
         $this->id = $id;
-        $opts = Option::query()->where('question_id', $question['id'])->get();
-        $this->optionsAnswer = [];
-        $cnt = 0;
-        foreach ($opts as $o){
-            $this->optionsAnswer[$cnt] = $o['correct'];
-            $cnt++;
+        $this->op = $op;
+        $this->info = [];
+        if ($op == 0){ // confirm they have submitted their answer
+            $this->info['answer_index'] = $data['answer_index'];
         }
     }
 

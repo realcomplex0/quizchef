@@ -22,12 +22,14 @@ class JoinLobby implements ShouldBroadcast
     private $code;
 
     public $player_list;
+    public $had_answered;
 
-    public function __construct($name, $code, $player_list)
+    public function __construct($name, $code, $player_list, $had_answered)
     {   
         $this->name = $name;
         $this->code = $code;
         $this->player_list = $player_list;
+        $this->had_answered = $had_answered;
     }
 
     /**

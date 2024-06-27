@@ -2,6 +2,7 @@
 import PlayerName from './PlayerName.vue';
 import {Link, router} from '@inertiajs/vue3';
 import QuizAnswer from './QuizAnswer.vue';
+import Scoreboard from './Scoreboard.vue';
 import Echo from 'laravel-echo';
 
 export default {
@@ -15,37 +16,65 @@ export default {
     data() {
         return {
             displayPlayers : this.players,
-            status : 0, // 0 - lobby, 1 - question, 2 - scoreboard, 3 - waiting for others,
-            currentQuestion : null,
-            currentOptions : null,
-            optionsAnswer : null,
+            status : 0, // 0 - lobby, 1 - question, 2 - see answers, 3 - scoreboard, 4 - end of game
+            questionData: {
+                currentQuestion : null,
+                currentOptions : null,
+                optionsAnswer : null,
+                confirmedAnswer : null,
+                timeRemaining: 1,
+                playerCount: 1,
+                answerCount: 0,
+            },
+            timerInterval: null,
+            scoreboard: null,
         }
     },
     mounted() {
+        this.questionData.playerCount = this.players.length;
         window.Echo.channel(`lobby.${this.lobbyCode}`)
             .listen('JoinLobby', (event) => {
+                this.questionData.answerCount -= event["had_answered"];
                 this.displayPlayers = event["player_list"];
             });
         window.Echo.channel(`lobby.${this.lobbyCode}`)
             .listen('StartGame', (event) => {
+                // this.questionData.playerCount = this.players.length;
+                this.questionData.answerCount = 0;
+                this.questionData.optionsAnswer = null;
+                this.questionData.confirmedAnswer = null;
+                this.questionData.timeRemaining = 1;
+                this.questionData.currentQuestion = event["question"];
+                this.questionData.currentOptions = event["options"];
+                this.questionData.timeRemaining = this.questionData.currentQuestion["timer"];
                 this.status = event["status"];
-                this.currentQuestion = event["question"];
-                this.currentOptions = event["options"];
-                this.optionsAnswers = null;
+                this.startTimer();
                 // this.displayPlayers = event["player_list"];
+            });
+        window.Echo.channel(`lobby.${this.lobbyCode}`)
+            .listen('UpdateLobby', (event) => {
+                if (event['op'] == 0){ // question ended, recieve correct answers
+                    this.questionData.optionsAnswer = event['info']['optionsAnswer'];
+                    this.questionData.timeRemaining = 0;
+                    this.status = 2;
+                } else if (event['op'] == 1){ // update answer count
+                    this.questionData.answerCount = event['info']['answer_count'];
+                } else if (event['op'] == 2){ // go to scoreboard
+                    this.scoreboard = event['info']['scoreboard'];
+                    this.status = 3;
+                }
             });
         window.Echo.channel(`player.${this.selected_player}`)
             .listen('UpdatePlayer', (event) => {
-                this.optionsAnswer = event['optionsAnswer'];
-                // console.log(this.optionsAnswer);
-            });
+                this.questionData.confirmedAnswer = event['info']['answer_index'];
+            })
     },
     unmounted(){
         window.Echo.leave(`lobby.${this.lobbyCode}`);
         window.Echo.leave(`player.${this.selected_player}`);
     },
     methods: {
-        startgame() {
+        startGame() {
             router.post('/start-game', {
                 code : this.lobbyCode
             })
@@ -60,6 +89,45 @@ export default {
                 code : this.lobbyCode,
                 answer_index : index
             })
+        },
+        startTimer(){
+            this.timerInterval = setInterval(() => {
+                this.questionData.timeRemaining -= 1;
+            }, 1000)
+        },
+        stopTimer(){
+            window.clearInterval(this.timerInterval);
+            
+        },
+        endQuestion(){
+            if (this.is_host == 0 || this.status != 1) return;
+            router.post('/end-question', {
+                code : this.lobbyCode,
+            })
+        },
+        goScoreboard(){
+            if (this.is_host == 0 || this.status != 2) return;
+            router.post('/go-scoreboard', {
+                code: this.lobbyCode,
+            })
+        }
+    },
+    watch: {
+        questionData : {
+            handler(newVal, oldVal){
+                if (newVal.timeRemaining <= 0) {
+                    this.stopTimer();
+                    this.endQuestion();
+                }
+                if (newVal.answerCount >= newVal.playerCount) this.endQuestion();
+            }, 
+            deep: true,
+        },
+        displayPlayers : {
+            handler(newVal, oldVal){
+                this.questionData.playerCount = newVal.length;
+            },
+            deep: true,
         }
     },
     computed: {
@@ -78,6 +146,7 @@ export default {
         Link,
         PlayerName,
         QuizAnswer,
+        Scoreboard,
     }
 }
 </script>
@@ -104,7 +173,7 @@ export default {
             <div class="w-full h-16 absolute ">
                 <p class="text-white text-3xl text-mid">{{ playerCount }}</p>
             </div>
-            <button v-if="is_host" @click="startgame" class="absolute btn-green w-1/2 left-1/2 bottom-0 border-white border-2 text-3xl" style="right:0%;height:100px;width:200px;transform:translateX(-50%)">
+            <button v-if="is_host" @click="startGame" class="absolute btn-green left-1/2 bottom-0 border-white border-2 text-3xl" style="height:100px;width:200px;transform:translateX(-50%)">
                 <p class="select-none">Start game</p>
             </button>
             <div class="grid grid-cols-4 gap-4 p-4 m-7 mt-20">
@@ -115,13 +184,20 @@ export default {
         </div>
 
         <!-- Question -->
-        <QuizAnswer v-if="status==1" class="absolute w-full" style="height:80%" :question="currentQuestion" :options="currentOptions" :optionsAnswer="optionsAnswer" @selected="processAnswer"></QuizAnswer>
+        <QuizAnswer v-if="status==1||status==2" class="absolute w-full" style="height:80%" :questionData="questionData" @selected="processAnswer"></QuizAnswer>
+
+        <button v-if="is_host&&status==2" @click="goScoreboard" class="absolute btn-green right-[1.25%] bottom-[2.5%] border-white border-2 h-[10%] w-[10%]">
+            <p class="select-none text-xl">Continue</p>
+        </button>
 
         <!-- Scoreboard -->
+        <Scoreboard v-if="status==3" class="absolute w-full" style="height:80%" :scoreboard="scoreboard"></Scoreboard>
 
+        <button v-if="is_host&&status==3" @click="startGame" class="absolute btn-green right-[1.25%] bottom-[2.5%] border-white border-2 h-[10%] w-[10%]">
+            <p class="select-none text-xl">Continue</p>
+        </button>
 
-        <!-- Waiting for others -->
-
+        <!-- Final standings -->
 
     </div>
 </template>

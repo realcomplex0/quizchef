@@ -15,6 +15,7 @@ use App\Models\Option;
 use App\Events\JoinLobby;
 use App\Events\StartGame;
 use App\Events\UpdatePlayer;
+use App\Events\UpdateLobby;
 use Inertia\Inertia;
 
 class LobbyController extends Controller
@@ -56,6 +57,7 @@ class LobbyController extends Controller
             $player->session_id = session('_token');
             $player->is_host = $is_host;
             $player->score = 0;
+            $player->has_answered = 0;
             $player->save();
         }
     }
@@ -73,6 +75,7 @@ class LobbyController extends Controller
 
     private function getNextQuestion($code){ // and increment next question counter
         $info = $this->getLobbyInfo($code);
+        if ($info == -1) return -1;
         $questions = $this->getQuestionList($info['quiz']['id']);
         $next_ind = $info['lobby']['next_question'];
         Lobby::query()->where('id', $info['lobby']['id'])->increment('next_question');
@@ -82,9 +85,19 @@ class LobbyController extends Controller
 
     private function getCurrentQuestion($code){
         $info = $this->getLobbyInfo($code);
+        if ($info == -1) return -1;
         $questions = $this->getQuestionList($info['quiz']['id']);
         $next_ind = $info['lobby']['next_question'];
         return $questions[$next_ind-1];
+    }
+
+    private function getScoreboard($code){
+        $info = $this->getLobbyInfo($code);
+        if ($info == -1) return -1;
+        $players = $this->getPlayerList($info['lobby']['id']);
+        $ret = [];
+        foreach ($players as $p) $ret[$p['nickname']] = $p['score'];
+        return $ret;
     }
     
     public function create(Request $request)
@@ -102,7 +115,7 @@ class LobbyController extends Controller
         // delete all other quizes that this user is hosting
         $prev_lobbies = Lobby::query()->where('quiz_host', $user->id)->get(); 
         Lobby::query()->where('quiz_host', $user->id)->delete();
-        foreach($prev_lobbies as $lob) event(new JoinLobby('', $lob['code'], $this->getPlayerList($lob['id'])));
+        foreach($prev_lobbies as $lob) event(new JoinLobby('', $lob['code'], $this->getPlayerList($lob['id']), 0));
 
         $lobby = Lobby::create([
             'code' => $code,
@@ -118,7 +131,7 @@ class LobbyController extends Controller
         $quiz = $quizzes[0];
 
         $this->addPlayer($user->username, $lobby['id'], true);
-        event(new JoinLobby($user->username, $code, $this->getPlayerList($lobby['id'])));
+        event(new JoinLobby($user->username, $code, $this->getPlayerList($lobby['id']), 0));
 
         return Redirect::route('lobby.play')->with(['lobbyId' => $lobby['id'],'lobbyCode'=> $lobby['code'], 'title' => $quiz['title']]);
     }
@@ -135,7 +148,7 @@ class LobbyController extends Controller
         if ($info == -1) return Redirect::route('/');
 
         $this->addPlayer($name, $info["lobby"]["id"], false);
-        event(new JoinLobby($name, $code, $this->getPlayerList($info["lobby"]["id"])));
+        event(new JoinLobby($name, $code, $this->getPlayerList($info["lobby"]["id"]), 0));
         
         return Redirect::route('lobby.play')->with(['lobbyId' => $info["lobby"]["id"],'lobbyCode'=> $code, 'title' => $info['quiz']['title']]);
     }
@@ -152,9 +165,10 @@ class LobbyController extends Controller
         if ($player != null && $player->is_host){ // if host leaves
             Lobby::query()->where('id', $info["lobby"]["id"])->delete();
         }
-
+        $had_answered = 0;
+        if ($info['lobby']['status'] == 1 && $player['has_answered'] == 1) $had_answered = 1;
         LobbyPlayer::query()->where('lobby_id', $info['lobby']['id'])->where('session_id', session('_token'))->delete();
-        event(new JoinLobby('', $code, $this->getPlayerList($info["lobby"]["id"])));
+        event(new JoinLobby('', $code, $this->getPlayerList($info["lobby"]["id"]), $had_answered));
         return Redirect::route('/');
     }
 
@@ -189,9 +203,16 @@ class LobbyController extends Controller
         if ($player == null || !$player->is_host){
             return Redirect::route('/');
         }
-        $nxt_question = $this->getNextQuestion($code);
-        if (gettype($nxt_question) == 'object'){
-            event(new StartGame($data['code'], 1, $nxt_question));
+
+        if ($info['lobby']['status'] == 0 || $info['lobby']['status'] == 3){
+            Lobby::query()->where('id', $info['lobby']['id'])->update(['status' => 1]);
+            LobbyPlayer::query()->where('lobby_id', $info['lobby']['id'])->update(['has_answered' => 0]);
+            $nxt_question = $this->getNextQuestion($code);
+            if (gettype($nxt_question) == 'object'){
+                event(new StartGame($data['code'], 1, $nxt_question));
+            } else {
+                dd('end');
+            }
         }
         return Redirect::route('lobby.play')->with(['lobbyId' => $info["lobby"]["id"],'lobbyCode'=> $code, 'title' => $info["quiz"]["title"]]);
     }
@@ -204,15 +225,66 @@ class LobbyController extends Controller
         $code = $data['code'];
         $ans_ind = $data['answer_index'];
         $info = $this->getLobbyInfo($code);
-        $player = $this->findPlayer($info['lobby']['id']);
-        $question = $this->getCurrentQuestion($code);
+        if ($info == -1) return Redirect::route('/');
 
-        $options = Option::query()->where('question_id', $question['id'])->get();
-        if ($options[$ans_ind]['correct'] == 1) {
-            LobbyPlayer::query()->where('id', $player['id'])->increment('score', 1);
+        $player = $this->findPlayer($info['lobby']['id']);
+
+        if ($player != null && $player['has_answered'] == 0 && $info['lobby']['status'] == 1){ // check if player already answered
+            LobbyPlayer::query()->where('id', $player['id'])->update(['has_answered' => 1]);
+            $question = $this->getCurrentQuestion($code);
+            $options = Option::query()->where('question_id', $question['id'])->get();
+            if ($options[$ans_ind]['correct'] == 1) {
+                LobbyPlayer::query()->where('id', $player['id'])->increment('score', 1);
+            }
+            $data = [];
+            $data['answer_index'] = $ans_ind;
+            event(new UpdatePlayer($player['id'], 0, $data));
+            $data2 = [];
+            $data2['lobby_id'] = $info['lobby']['id'];
+            event(new UpdateLobby($code, 1, $data2));
         }
-        
-        event(new UpdatePlayer($player['id'], $question));
+
+        return Redirect::route('lobby.play')->with(['lobbyId' => $info["lobby"]["id"],'lobbyCode'=> $code, 'title' => $info["quiz"]["title"]]);
+    }
+
+    public function endQuestion(Request $request){
+        $data = $request->validate([
+            'code' => 'required',
+        ]);
+        $code = $data['code'];
+        $info = $this->getLobbyInfo($code);
+        if ($info == -1) return Redirect::route('/');
+
+        $player = $this->findPlayer($info['lobby']['id']);
+        if ($player == null || $player['is_host'] == 0) return Redirect::route('/');
+
+        if ($info['lobby']['status'] == 1){
+            Lobby::query()->where('id', $info['lobby']['id'])->update(['status' => 2]);
+            $data = [];
+            $data['question'] = $this->getCurrentQuestion($code);
+            event(new UpdateLobby($code, 0, $data));
+        }
+
+        return Redirect::route('lobby.play')->with(['lobbyId' => $info["lobby"]["id"],'lobbyCode'=> $code, 'title' => $info["quiz"]["title"]]);
+    }
+
+    public function goScoreboard(Request $request){
+        $data = $request->validate([
+            'code' => 'required',
+        ]);
+        $code = $data['code'];
+        $info = $this->getLobbyInfo($code);
+        if ($info == -1) return Redirect::route('/');
+
+        $player = $this->findPlayer($info['lobby']['id']);
+        if ($player == null || $player['is_host'] == 0) return Redirect::route('/');
+
+        if ($info['lobby']['status'] == 2){
+            Lobby::query()->where('id', $info['lobby']['id'])->update(['status' => 3]);
+            $data = [];
+            $data['scoreboard'] = $this->getScoreboard($code);
+            event(new UpdateLobby($code, 2, $data));
+        }
 
         return Redirect::route('lobby.play')->with(['lobbyId' => $info["lobby"]["id"],'lobbyCode'=> $code, 'title' => $info["quiz"]["title"]]);
     }

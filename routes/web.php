@@ -40,8 +40,9 @@ Route::post('/leave-lobby', [LobbyController::class, 'leave'])->name('leave-lobb
 Route::get('/lobby', [LobbyController::class, 'playerView'])->name('lobby.play');
 
 Route::post('/start-game', [LobbyController::class, 'startGame'])->name('lobby.start');
-
 Route::post('/submit-answer', [LobbyController::class, 'submitAnswer'])->name('lobby.submit');
+Route::post('/end-question', [LobbyController::class, 'endQuestion'])->name('lobby.end_question');
+Route::post('/go-scoreboard', [LobbyController::class, 'goScoreboard'])->name('lobby.go_scoreboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
