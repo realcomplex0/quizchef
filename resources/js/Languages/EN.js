@@ -79,6 +79,7 @@ const root = {
         continue: "Continue",
         answered: "answered",
         scoreboard: "Scoreboard",
+        final_scoreboard: "Final Results",
         notification: "Your answer has been submitted",
         game_ongoing: "The game is ongoing! Please wait for the next round!",
         please_wait: "Please wait until next round",

@@ -222,7 +222,7 @@ class LobbyController extends Controller
                 event(new StartGame($data['code'], 1, $nxt_question));
             } else {
                 if ($nxt_question == -1) return Redirect::route('/');
-                dd('end');
+                event(new UpdateLobby($data['code'], 3, ''));
             }
         }
         return Redirect::route('lobby.play')->with(['lobbyId' => $info["lobby"]["id"],'lobbyCode'=> $code, 'title' => $info["quiz"]["title"]]);
@@ -246,10 +246,10 @@ class LobbyController extends Controller
             if (gettype($question) != 'object') return Redirect::route('/');
             $options = Option::query()->where('question_id', $question['id'])->get();
             if ($options[$ans_ind]['correct'] == 1) {
-                $mx_score = 1100;
-                $time_passed = time()-$info['lobby']['question_start_time'];
+                $mx_score = 10100;
+                $time_passed = microtime(true)-$info['lobby']['question_start_time'];
                 $mx_time = $question['timer'];
-                $score = $mx_score - 500*($time_passed/$mx_time);
+                $score = min(10000, $mx_score - 5100*($time_passed/$mx_time));
                 LobbyPlayer::query()->where('id', $player['id'])->increment('score', $score);
                 LobbyPlayer::query()->where('id', $player['id'])->update(['score_delta' => $score]);
             }

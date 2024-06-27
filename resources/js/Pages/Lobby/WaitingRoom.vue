@@ -4,6 +4,7 @@ import {Link, router} from '@inertiajs/vue3';
 import QuizAnswer from './QuizAnswer.vue';
 import Scoreboard from './Scoreboard.vue';
 import SettingsModal from '@/Components/SettingsModal.vue';
+import FinalScreen from './FinalScreen.vue';
 import Echo from 'laravel-echo';
 
 export default {
@@ -85,6 +86,9 @@ export default {
                     this.checkedStill = 0;
                     this.scoreboard = event['info']['scoreboard'];
                     this.status = 3;
+                } else if (event['op'] == 3){
+                    this.ccheckedStill = 0;
+                    this.status = 4;
                 }
             });
         window.Echo.channel(`player.${this.selected_player}`)
@@ -169,6 +173,7 @@ export default {
         QuizAnswer,
         Scoreboard,
         SettingsModal,
+        FinalScreen,
     }
 }
 </script>
@@ -225,6 +230,7 @@ export default {
         </button>
 
         <!-- Final standings -->
+        <FinalScreen v-if="status==4" class="absolute w-full" style="height:80%" :scoreboard="scoreboard"></FinalScreen>
 
     </div>
 </template>
