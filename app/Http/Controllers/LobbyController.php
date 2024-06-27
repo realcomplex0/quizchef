@@ -77,9 +77,10 @@ class LobbyController extends Controller
         $info = $this->getLobbyInfo($code);
         if ($info == -1) return -1;
         $questions = $this->getQuestionList($info['quiz']['id']);
+        if ($questions == null) return -1;
         $next_ind = $info['lobby']['next_question'];
         Lobby::query()->where('id', $info['lobby']['id'])->increment('next_question');
-        if ($next_ind >= count($questions)) return -1;
+        if ($next_ind >= count($questions)) return 1;
         return $questions[$next_ind];
     }
 
@@ -87,6 +88,7 @@ class LobbyController extends Controller
         $info = $this->getLobbyInfo($code);
         if ($info == -1) return -1;
         $questions = $this->getQuestionList($info['quiz']['id']);
+        if ($questions == null) return -1;
         $next_ind = $info['lobby']['next_question'];
         return $questions[$next_ind-1];
     }
@@ -95,6 +97,7 @@ class LobbyController extends Controller
         $info = $this->getLobbyInfo($code);
         if ($info == -1) return -1;
         $players = $this->getPlayerList($info['lobby']['id']);
+        if ($players == null) return -1;
         $ret = [];
         foreach ($players as $p) $ret[$p['nickname']] = $p['score'];
         return $ret;
@@ -149,8 +152,9 @@ class LobbyController extends Controller
 
         $this->addPlayer($name, $info["lobby"]["id"], false);
         event(new JoinLobby($name, $code, $this->getPlayerList($info["lobby"]["id"]), 0));
-        
-        return Redirect::route('lobby.play')->with(['lobbyId' => $info["lobby"]["id"],'lobbyCode'=> $code, 'title' => $info['quiz']['title']]);
+        $ch = 0;
+        if ($info['lobby']['status'] != 0) $ch = 1;
+        return Redirect::route('lobby.play')->with(['lobbyId' => $info["lobby"]["id"],'lobbyCode'=> $code, 'title' => $info["quiz"]["title"], 'checked' => $ch]);
     }
 
     public function leave(Request $request){
@@ -176,6 +180,7 @@ class LobbyController extends Controller
         $lobbyCode = session('lobbyCode', null);
         $title = session('title', null);
         $lobbyId = session('lobbyId', null);
+        $checked = session('checked', 0);
         $player = $this->findPlayer($lobbyId);
 
         if(!$lobbyCode || !$lobbyId || $player == null) return Redirect::route('/');
@@ -187,6 +192,7 @@ class LobbyController extends Controller
             'players' => $playerList,
             'selected_player' => $player["id"],
             'is_host' => $player["is_host"],
+            'checked' => $checked,
         ]);
     }
 
@@ -211,6 +217,7 @@ class LobbyController extends Controller
             if (gettype($nxt_question) == 'object'){
                 event(new StartGame($data['code'], 1, $nxt_question));
             } else {
+                if ($nxt_question == -1) return Redirect::route('/');
                 dd('end');
             }
         }
@@ -232,6 +239,7 @@ class LobbyController extends Controller
         if ($player != null && $player['has_answered'] == 0 && $info['lobby']['status'] == 1){ // check if player already answered
             LobbyPlayer::query()->where('id', $player['id'])->update(['has_answered' => 1]);
             $question = $this->getCurrentQuestion($code);
+            if (gettype($question) != 'object') return Redirect::route('/');
             $options = Option::query()->where('question_id', $question['id'])->get();
             if ($options[$ans_ind]['correct'] == 1) {
                 LobbyPlayer::query()->where('id', $player['id'])->increment('score', 1);
@@ -262,6 +270,7 @@ class LobbyController extends Controller
             Lobby::query()->where('id', $info['lobby']['id'])->update(['status' => 2]);
             $data = [];
             $data['question'] = $this->getCurrentQuestion($code);
+            if (gettype($data['question']) != 'object') return Redirect::route('/');
             event(new UpdateLobby($code, 0, $data));
         }
 
@@ -283,6 +292,7 @@ class LobbyController extends Controller
             Lobby::query()->where('id', $info['lobby']['id'])->update(['status' => 3]);
             $data = [];
             $data['scoreboard'] = $this->getScoreboard($code);
+            if (gettype($data['scoreboard']) != 'array') return Redirect::route('/');
             event(new UpdateLobby($code, 2, $data));
         }
 

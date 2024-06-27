@@ -33,7 +33,7 @@ export default {
     props : {
         questionData : {
             default: {
-                currentQuestion : null,
+                currentQuestion: null,
                 currentOptions : null,
                 optionsAnswer : null,
                 confirmedAnswer : null,

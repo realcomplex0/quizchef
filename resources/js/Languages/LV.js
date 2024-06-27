@@ -78,7 +78,9 @@ const root = {
         continue: "Turpināt",
         answered: "atbildējuši",
         scoreboard: "Rezultāti",
-        notification: "Tava atbilde ir iesniegta"
+        notification: "Tava atbilde ir iesniegta",
+        game_ongoing: "Spēle šobrīd iet! Lūdzu uzgaidiet līdz nākamajam raundam!",
+        please_wait: "Lūdzu uzgaidiet līdz nākamajam raundam",
     }
 }
 

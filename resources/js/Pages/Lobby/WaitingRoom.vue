@@ -11,6 +11,9 @@ export default {
         lobbyCode: Number,
         title: String,
         players: Array,
+        checked: {
+            default: 0,
+        },
         selected_player: Number,
         is_host: Number,
     },
@@ -30,14 +33,19 @@ export default {
             timerInterval: null,
             scoreboard: null,
             settingsOpen: false,
+            checkedStill: 0,
+            tmpPlayerList: null,
         }
     },
     mounted() {
-        this.questionData.playerCount = this.players.length;
+        this.displayPlayers = this.players;
+        this.questionData.playerCount = this.displayPlayers.length;
+        this.checkedStill = this.checked;
         window.Echo.channel(`lobby.${this.lobbyCode}`)
             .listen('JoinLobby', (event) => {
                 this.questionData.answerCount -= event["had_answered"];
-                this.displayPlayers = event["player_list"];
+                if (this.status != 1) this.displayPlayers = event["player_list"];
+                else this.tmpPlayerList = event["player_list"];
             });
         window.Echo.channel(`lobby.${this.lobbyCode}`)
             .listen('StartGame', (event) => {
@@ -56,19 +64,34 @@ export default {
         window.Echo.channel(`lobby.${this.lobbyCode}`)
             .listen('UpdateLobby', (event) => {
                 if (event['op'] == 0){ // question ended, recieve correct answers
+                    this.checkedStill = 0;
+                    if (this.status == 0) {
+                        this.questionData.currentQuestion = {
+                            image_path: null,
+                            title: this.$global.lang.game.please_wait,
+                        };
+                        this.questionData.currentOptions = [];
+                    }
                     this.questionData.optionsAnswer = event['info']['optionsAnswer'];
                     this.questionData.timeRemaining = 0;
+                    if (this.tmpPlayerList != null){
+                        this.displayPlayers = this.tmpPlayerList;
+                        this.tmpPlayerList = null;
+                    }
                     this.status = 2;
                 } else if (event['op'] == 1){ // update answer count
                     this.questionData.answerCount = event['info']['answer_count'];
                 } else if (event['op'] == 2){ // go to scoreboard
+                    this.checkedStill = 0;
                     this.scoreboard = event['info']['scoreboard'];
                     this.status = 3;
                 }
             });
         window.Echo.channel(`player.${this.selected_player}`)
             .listen('UpdatePlayer', (event) => {
-                this.questionData.confirmedAnswer = event['info']['answer_index'];
+                if (event['op'] == 0){
+                    this.questionData.confirmedAnswer = event['info']['answer_index'];
+                }
             })
     },
     unmounted(){
@@ -185,6 +208,7 @@ export default {
                 </div>
             </div>
         </div>
+        <p v-if="checkedStill" class="text-white text-mid text-3xl">{{ $global.lang.game.game_ongoing }}</p>
 
         <!-- Question -->
         <QuizAnswer v-if="status==1||status==2" class="absolute w-full" style="height:80%" :questionData="questionData" @selected="processAnswer"></QuizAnswer>
