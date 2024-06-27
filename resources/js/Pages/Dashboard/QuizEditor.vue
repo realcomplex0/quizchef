@@ -14,7 +14,7 @@ export default {
                 questions : [
                     {
                         title: 'Question 1',
-                        timer: 10,
+                        timer: 30,
                         options: [
                             {title: 'Alpha', correct: 0},
                             {title: 'Beta', correct: 1},
@@ -55,7 +55,7 @@ export default {
                     this.currentQuiz.questions = [
                         {
                             title: 'Question 1',
-                            timer: 10,
+                            timer: 30,
                             options: [
                                 {title: 'Alpha', correct: 0},
                                 {title: 'Beta', correct: 1},
@@ -129,7 +129,7 @@ export default {
         addQuestion() {
             this.currentQuiz.questions.push({
                 title: `Question ${this.currentQuiz.questions.length + 1}`,
-                timer: 20,
+                timer: 30,
                 options: [
                     {title: 'Alpha', correct: 1},
                     {title: 'Beta', correct: 1},

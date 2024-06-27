@@ -10,7 +10,10 @@ export default {
                 { value: 15, text: '15s'},
                 { value: 20, text: '20s'},
                 { value: 25, text: '25s'},
-                { value: 30, text: '30s'}
+                { value: 30, text: '30s'},
+                { value: 40, text: '40s'},
+                { value: 50, text: '50s'},
+                { value: 60, text: '60s'}
             ]
         }
     },
@@ -37,7 +40,7 @@ export default {
 </script>
 <template>
     <div>
-        <label for="selectTimer" class="text-red-500"> 🕒Time Limit: </label>
+        <label for="selectTimer" class="text-red-500 text-xl"> 🕒Time Limit: </label>
         <select id="selectTimer" v-model="selectedOption" @change="changeOption">
             <option v-for="option in options" :key="option.value" :value="option.value">
                 {{ option.text }}

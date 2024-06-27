@@ -36,7 +36,7 @@ class QuizEditorController extends Controller
             'title' => 'required|string|max:255',
             'questions' => 'required|array|min:1|max:10',
             'questions.*.title' => 'required|string',
-            'questions.*.timer' => 'required|numeric|min:10|max:30',
+            'questions.*.timer' => 'required|numeric|min:10|max:60',
             'questions.*.id' => 'numeric|min:0',
             'questions.*.options' => 'array|max:8',
             'questions.*.options.*.title' => 'required|string',

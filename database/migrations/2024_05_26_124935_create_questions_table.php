@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger("quiz_id");
             $table->unsignedInteger("index");
             $table->string('title');
-            $table->unsignedInteger("timer")->default(10);
+            $table->unsignedInteger("timer")->default(30);
             $table->string('image_path')->nullable();
             $table->foreign('quiz_id')
                 ->references('id')
