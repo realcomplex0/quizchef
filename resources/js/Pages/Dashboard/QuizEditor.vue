@@ -238,7 +238,7 @@ export default {
             </div>
             <div class="flex flex-row">
                 <div class="w-1/6 text-3xl border-r-2 flex flex-col items-center">
-                    <div class="h-auto max-h-[60vh] flex flex-col overflow-y-auto h-full overflow-x-hidden">
+                    <div class="max-h-[60vh] flex flex-col overflow-y-auto h-full overflow-x-hidden">
                         <div v-for="(question, index) in currentQuiz.questions" 
                             :key="index"
                             class="h-20"

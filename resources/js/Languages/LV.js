@@ -70,6 +70,9 @@ const root = {
     settingsModal: {
         settings: "Iestatījumi",
         language: "Valoda",
+        sound: "Skaņa",
+        on: "ir",
+        off: "nav",
     },
     game: {
         code: "Pievienoties ar kodu",

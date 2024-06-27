@@ -37,7 +37,7 @@ export default {
 </script>
 
 <template>
-    <audio v-if="bump" autoplay>
+    <audio v-if="bump&&$global.settings.sound==1" autoplay>
         <source src="../../../../public/assets/sounds/pop.mp3" type="audio/mpeg">
     </audio>
     <div>

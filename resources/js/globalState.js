@@ -6,6 +6,7 @@ const globalState = reactive({
     // default settings
     settings: {
         language: "en",
+        sound: 1,
     }, 
 
     lang: computed(() => {

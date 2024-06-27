@@ -70,6 +70,9 @@ const root = {
     settingsModal: {
         settings: "Settings",
         language: "Language",
+        sound: "Sound",
+        on: "on",
+        off: "off",
     },
     game: {
         code: "Join with the code",
