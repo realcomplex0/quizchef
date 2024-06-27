@@ -181,7 +181,7 @@ export default {
 <template>
     <div class="absolute w-full h-full">
         <SettingsModal :isOpen="settingsOpen" @close="settingsOpen=false"/>
-        <button @click="settingsOpen=true" class="fixed bottom-4 left-4 h-16 w-16 z-10">
+        <button @click="settingsOpen=true" class="settings-cog">
             <img class="select-none" src="../../../../public/assets/img/SettingsCog.png" draggable="false">
         </button>
         <div class="p-6 bg-light flex space-between items-center justify-between border-b-2 border-white">
@@ -218,14 +218,14 @@ export default {
         <!-- Question -->
         <QuizAnswer v-if="status==1||status==2" class="absolute w-full" style="height:80%" :questionData="questionData" @selected="processAnswer"></QuizAnswer>
 
-        <button v-if="is_host&&status==2" @click="goScoreboard" class="absolute btn-green right-[1.25%] bottom-[2.5%] border-white border-2 h-[10%] w-[10%]">
+        <button v-if="is_host&&status==2" @click="goScoreboard" class="absolute continue-button btn-green right-[1.25%] bottom-[2.5%] border-white border-2 h-[10%] w-[10%]">
             <p class="select-none text-xl">{{$global.lang.game.continue}}</p>
         </button>
 
         <!-- Scoreboard -->
         <Scoreboard v-if="status==3" class="absolute w-full" style="height:80%" :scoreboard="scoreboard"></Scoreboard>
 
-        <button v-if="is_host&&status==3" @click="startGame" class="absolute btn-green right-[1.25%] bottom-[2.5%] border-white border-2 h-[10%] w-[10%]">
+        <button v-if="is_host&&status==3" @click="startGame" class="absolute continue-button btn-green right-[1.25%] bottom-[2.5%] border-white border-2 h-[10%] w-[10%]">
             <p class="select-none text-xl">{{$global.lang.game.continue}}</p>
         </button>
 

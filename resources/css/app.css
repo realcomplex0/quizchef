@@ -15,6 +15,17 @@ html {
     overflow: hidden
 }
 
+::-webkit-scrollbar {
+    width: 5px;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--main-bg-color-light); 
+    @apply rounded
+}
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500 
+}
+
 /* doesnt work when using multiple translates on one element */
 .anchor-center {
     transform: translate(-50%, -50%);
@@ -30,6 +41,10 @@ html {
 }
 .bg-light {
     background-color: var(--main-bg-color-light);
+}
+
+.text-light {
+    color: var(--main-bg-color-light);
 }
 
 .btn-green {
@@ -67,6 +82,25 @@ html {
 }
 .btn-red-nh {
     @apply bg-red-500 text-white rounded-md transition pointer-events-none;
+}
+
+.settings-cog {
+    @apply fixed bottom-4 left-4 h-16 w-16 z-10 transition;
+}
+
+.settings-cog:hover {
+    transform: scale(1.2);
+}
+
+.favorite-icon:hover {
+    transform: scale(1.5);
+}
+
+.scale-up:hover {
+    transform: scale(1.1);
+}
+.scale-up2 {
+    transform: scale(1.1);
 }
 
 .landing-page-btn {

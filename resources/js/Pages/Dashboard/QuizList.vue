@@ -125,7 +125,7 @@ export default {
 </script>
 
 <template>
-    <button @click="settingsOpen=true" class="fixed bottom-4 left-4 h-16 w-16 z-10">
+    <button @click="settingsOpen=true" class="settings-cog">
         <img class="select-none" src="../../../../public/assets/img/SettingsCog.png" draggable="false">
     </button>
     <SettingsModal :isOpen="settingsOpen" @close="settingsOpen=false"/>

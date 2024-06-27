@@ -5,4 +5,18 @@
     transition:top 0.5s;
 }
 
+@keyframes continue-button-frames {
+    0% {
+        transform: translateY(200%);
+    }
+    100% { 
+        transform: translateY(0%);
+    }
+}
+
+.continue-button {
+    animation: continue-button-frames 1s cubic-bezier(.23,.46,.2,1) 1s;
+    animation-fill-mode: both;
+}
+
 /*  */

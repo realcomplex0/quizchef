@@ -4,7 +4,7 @@
         <p class="absolute text-6xl text-white font-bold anchor-center left-1/2 select-none" style="top:10%">QuizChef</p>
         
         <!-- Settings -->
-        <button @click="settingsOpen=true" class="fixed bottom-4 left-4 h-16 w-16 z-10">
+        <button @click="settingsOpen=true" class="settings-cog">
             <img class="select-none" src="../../../public/assets/img/SettingsCog.png" draggable="false">
         </button>
         <SettingsModal :isOpen="settingsOpen" @close="settingsOpen=false"/>
@@ -67,17 +67,17 @@
         <!-- Join room box -->
         <div class="absolute w-1/5 h-1/2 bg-light border-2 rounded-lg anchor-center" style="left:70%;top:50%">
             <!-- Title -->
-            <!-- <div class="absolute left-1/2 anchor-center" style="top:10%">
+            <div class="absolute left-1/2 anchor-center" style="top:10%">
                 <p class="absolute text-2xl text-white font-bold anchor-center left-1/2 top-1/2 select-none text-nowrap">{{ $global.lang.landingPage.ifYourePlaying }}</p>
-            </div> -->
+            </div>
 
             <!-- TODO: room code text box -->
 
             <!-- Go to room button "Cook" -->
-            <input id="code" :placeholder="$global.lang.landingPage.code" v-model="join_code" class="absolute bg-light text-white border-white border-2 landing-page-btn rounded-lg" style="top:15%;height:20%;width:75%"/>
-            <input id="code" :placeholder="$global.lang.landingPage.name" v-model="join_name" class="absolute bg-light text-white border-white border-2 landing-page-btn rounded-lg" style="top:40%;height:20%;width:75%"/>
+            <input id="code" :placeholder="$global.lang.landingPage.code" v-model="join_code" class="absolute bg-light text-white border-white border-2 landing-page-btn rounded-lg" style="top:30%;height:20%;width:75%"/>
+            <input id="code" :placeholder="$global.lang.landingPage.name" v-model="join_name" class="absolute bg-light text-white border-white border-2 landing-page-btn rounded-lg" style="top:55%;height:20%;width:75%"/>
             <button @click="joinGame"
-                class="btn-green absolute landing-page-btn" style="top:75%;height:20%;width:75%"
+                class="btn-green absolute landing-page-btn" style="top:80%;height:20%;width:75%"
             >
                 <p class="text-mid">{{ $global.lang.landingPage.cook }}! 👨‍🍳</p>
             </button>

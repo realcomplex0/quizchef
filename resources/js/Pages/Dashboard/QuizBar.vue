@@ -47,9 +47,9 @@ export default {
             <button @click="deleteQuiz" class="mr-4 btn-red w-20 h-10 text-white border-2">
                 {{ $global.lang.dashboard.delete }}
             </button>
-            <button @click="toggleFavorite">
-                <img v-if="quiz.favorite" class="select-none w-4 h-4 mr-4" src="../../../../public/assets/img/ActiveFavorite.png" draggable="false">
-                <img v-else class="select-none w-4 h-4 mr-4" src="../../../../public/assets/img/InactiveFavorite.png" draggable="false" />
+            <button @click="toggleFavorite" class="">
+                <img v-if="quiz.favorite" class="select-none w-4 h-4 mr-4 favorite-icon transition" style="transition-duration: 300ms;" src="../../../../public/assets/img/ActiveFavorite.png" draggable="false">
+                <img v-else class="select-none w-4 h-4 mr-4 favorite-icon transition" style="transition-duration: 300ms;" src="../../../../public/assets/img/InactiveFavorite.png" draggable="false" />
             </button>
         </div>
     </div>
