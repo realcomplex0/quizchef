@@ -14,6 +14,8 @@ export default {
         return {
             currentQuizzes : [],
             deleteQuizConfirm: false,
+            toggleFavorite: false,
+            toggleFavoriteQuizId: -1,
             deleteQuizId: -1,
             searchQuery : '',
             searching: false
@@ -51,18 +53,67 @@ export default {
         cancelSearch() {
             this.searching = false
             this.searchQuery = ''
+        },
+        disarmToggleFavorite() {
+            this.toggleFavoriteQuizId = -1
+            this.toggleFavorite = false
+        },
+        onToggleFavorite(id) {
+            this.toggleFavoriteQuizId = id
+            this.toggleFavorite = true
+            // let favorite_value = null
+            // this.currentQuizzes = this.currentQuizzes.map(quiz => {
+            //     if(quiz.id == id){
+            //         favorite_value = !quiz.favorite
+            //         return {...quiz, 'favorite' : !quiz.favorite}
+            //     }
+            //     else{
+            //         return quiz
+            //     }
+            // })
+            
+            // router.patch(`/quiz/${id}`, {'favorite' : favorite_value})
+        },
+        triggerToggleFavorite(){
+            let favorite_value = null
+            this.currentQuizzes = this.currentQuizzes.map(quiz => {
+                if(quiz.id == this.toggleFavoriteQuizId){
+                    favorite_value = !quiz.favorite
+                    return {...quiz, 'favorite' : !quiz.favorite}
+                }
+                else{
+                    return quiz
+                }
+            })
+            
+            router.patch(`/quiz/${this.toggleFavoriteQuizId}`, {'favorite' : favorite_value})
+            this.disarmToggleFavorite()
         }
     },
     computed: {
         deletingQuizName(){
-            for (let i in this.currentQuizzes){
-                if (this.currentQuizzes[i].id == this.deleteQuizId) return this.currentQuizzes[i].title;
-            }
-            return "not found :(";
+            return this.currentQuizzes.find(quiz => quiz.id == this.deleteQuizId).title
+        },
+        toggleFavoriteQuizName() {
+            return this.currentQuizzes.find(quiz => quiz.id == this.toggleFavoriteQuizId).title
+        },
+        toggleFavoriteOperation() {
+            if(this.currentQuizzes.find(quiz => quiz.id == this.toggleFavoriteQuizId).favorite)
+                return 'Remove from favorites: '
+            else
+                return 'Add to favorites: '
         },
         filteredList() {
             return this.currentQuizzes.filter(quiz => quiz.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
-        }
+        },
+        favoriteList() {
+            return this.currentQuizzes.filter(quiz => quiz.favorite && quiz.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
+        },
+        recentList() {
+            return [...this.currentQuizzes.filter(quiz => quiz.title.toLowerCase().includes(this.searchQuery.toLowerCase()))].sort((x, y) => {
+                return new Date(y.updated_at) - new Date(x.updated_at)
+            })
+        },
     },
     components: {
         Link, QuizBar, DeleteButton, Modal
@@ -87,10 +138,24 @@ export default {
         </div>
     </Modal>
 
+    <Modal :isOpen="toggleFavorite" @close="disarmToggleFavorite" :height="'9rem'" :width="'25%'">
+        <div class="absolute w-full h-12 text-white border-b text-nowrap"> 
+            <p class="text-mid text-l"> {{toggleFavoriteOperation}} {{toggleFavoriteQuizName}}?</p>
+        </div>
+        <div class="absolute flex w-full h-12 bottom-6 justify-around">
+            <button @click="triggerToggleFavorite" class="btn-green text-white border-2 p-3 w-1/3">
+                Confirm
+            </button>
+            <button @click="disarmToggleFavorite" class="btn-blue text-white border-2 p-3 w-1/3">
+                Cancel
+            </button>
+        </div>
+    </Modal>
+
     <div class="absolute w-full h-full">
         <div class="flex flex-col w-full h-full">
-            <div class="p-6 bg-light flex space-between items-center justify-between border-b-2 border-white">
-                <p class="text-5xl text-white font-bold select-none">
+            <div class="p-4 bg-light flex space-between items-center justify-between border-b-2 border-white">
+                <p class="pl-4 text-3xl text-white font-bold select-none">
                     <Link href='/'>
                         QuizChef
                     </Link>
@@ -103,14 +168,14 @@ export default {
                         :href="route('logout')" 
                         method="post"
                         as="button"
-                        class="ml-4 btn-red text-white border-2 p-3"
+                        class="ml-4 btn-red text-white border-2 p-1"
                         >
                         Log Out
                     </Link>
                 </div>
             </div>
-            <div class="p-4 flex flex-col h-full">
-                <div class="p-4 flex flex-row items-center border-b-2 border-gray-500">
+            <div class="p-2 flex flex-col h-full">
+                <div class="p-3 flex flex-row items-center border-b-2 border-gray-500">
                     <p class="text-xl text-white">My quizzes</p>
                     <div class="pl-7">
                         <p v-if="!searching && !searchQuery" class="cursor-pointer text-white text-xl " @click="startSearch">🔎 Search </p>
@@ -134,9 +199,20 @@ export default {
                             New Quiz
                         </Link>
                     </p>
+                    <p class="pl-7 text-white text-xl">
+                        <p> Browse</p>
+                    </p>
                 </div>
-                <div class="overflow-y-auto max-h-[70%]">
-                    <QuizBar @remove-quiz="removeQuizAsk" v-for="quiz in filteredList" :key="quiz.id" :quiz="quiz"/>
+
+                <p class="text-yellow-500 p-4 text-xl">Favorites</p>
+                <div class="overflow-y-auto max-h-[25vh]">
+                    <QuizBar @toggle-favorite="onToggleFavorite" @remove-quiz="removeQuizAsk" v-for="quiz in favoriteList" :key="quiz.id" :quiz="quiz"/>
+                </div>
+                <div>
+                <p class="text-yellow-500 p-4 text-xl">Recents</p>
+                </div>
+                <div class="overflow-y-auto max-h-[40vh]">
+                    <QuizBar @toggle-favorite="onToggleFavorite" @remove-quiz="removeQuizAsk" v-for="quiz in recentList" :key="quiz.id" :quiz="quiz"/>
                 </div>
             </div>
         </div>

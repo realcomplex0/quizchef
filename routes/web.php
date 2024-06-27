@@ -24,6 +24,7 @@ Route::get('/', function () {
 Route::get('/dashboard', [QuizListController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::patch('/quiz/{quiz}', [QuizListController::class, 'patch'])->name('quiz.patch');
 Route::delete('/quiz/{id}', [QuizListController::class, 'destroy'])->name('quiz.destroy');
 Route::get('/quiz/{id?}', [QuizEditorController::class, 'view'])->name('quiz.view');
 Route::post('/quiz/{id?}', [QuizEditorController::class, 'update'])->name('quiz.update');

@@ -28,4 +28,12 @@ class QuizListController extends Controller
         $quiz->delete();
         return redirect()->route('dashboard');
     }
+    public function patch(Request $request, Quiz $quiz) {
+        $validatedData = $request->validate([
+            'favorite' => 'required|boolean'
+        ]);
+        $quiz->favorite = $validatedData['favorite'];
+        $quiz->save();
+        return redirect()->route('dashboard');
+    }
 }

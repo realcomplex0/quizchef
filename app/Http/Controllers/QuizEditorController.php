@@ -34,6 +34,8 @@ class QuizEditorController extends Controller
         $user_id = Auth::id();
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
+            'public' => 'required|boolean',
+            'favorite' => 'required|boolean',
             'questions' => 'required|array|min:1|max:10',
             'questions.*.title' => 'required|string',
             'questions.*.timer' => 'required|numeric|min:10|max:60',
@@ -43,6 +45,7 @@ class QuizEditorController extends Controller
             'questions.*.options.*.correct' => 'required|boolean',
             'questions.*.options.*.id' => 'numeric|min:0'
         ]);
+        Log::info('Is this good?' . $validatedData['public']);
         if($id == null){
             $quiz = new Quiz();
             $quiz->user_id = $user_id;
@@ -52,6 +55,8 @@ class QuizEditorController extends Controller
             $quiz = Quiz::findOrFail($id);
         }
         $quiz->title = $validatedData['title'];
+        $quiz->public = $validatedData['public'];
+        $quiz->favorite = $validatedData['favorite'];
         $quiz->save();
         foreach ($validatedData['questions'] as $questionObject) {
             if(!isset($questionObject['id'])){

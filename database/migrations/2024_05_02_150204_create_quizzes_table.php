@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('title');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('plays')->default(0);
+            $table->boolean('favorite')->default(false);
+            $table->boolean('public')->default(false);
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')

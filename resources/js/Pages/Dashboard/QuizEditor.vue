@@ -4,6 +4,7 @@ import Modal from '../../Components/Modal.vue';
 import DeleteButton from '@/Components/DeleteButton.vue';
 import ImageUpload from './ImageUpload.vue';
 import TimerDropdown from './TimerDropdown.vue'
+import PrivacyToggle from './PrivacyToggle.vue'
 
 export default {
     data () {
@@ -11,6 +12,8 @@ export default {
             currentQuiz: {
                 plays: 0,
                 title: 'Untitled Quiz',
+                favorite: false,
+                public: 0,
                 questions : [
                     {
                         title: 'Question 1',
@@ -162,17 +165,32 @@ export default {
             this.saveQuiz()
         },
         save_image(img, img_url) {
-            this.currentQuiz.questions[this.selectedQuestion].image_path = img_url
-            router.post(`/img/quiz/${this.currentQuiz.id}/question/${this.currentQuiz.questions[this.selectedQuestion].id}`, {
-                'image' : img
-            })
+            if(this.currentQuiz.id){
+                this.currentQuiz.questions[this.selectedQuestion].image_path = img_url
+                router.post(`/img/quiz/${this.currentQuiz.id}/question/${this.currentQuiz.questions[this.selectedQuestion].id}`, {
+                    'image' : img
+                })
+            }
+            else{
+                this.currentQuiz.questions[this.selectedQuestion].image_path = img_url
+                router.post('/quiz', this.currentQuiz, {onSuccess: (page) => {
+                    this.currentQuiz.questions[this.selectedQuestion].image_path = img_url
+                    router.post(`/img/quiz/${this.currentQuiz.id}/question/${this.currentQuiz.questions[this.selectedQuestion].id}`, {
+                        'image' : img
+                    })
+                }})
+            }
         },
         delete_image() {
             router.delete(`/img/quiz/${this.currentQuiz.id}/question/${this.currentQuiz.questions[this.selectedQuestion].id}`)
         },
+        toggle_privacy() {
+            this.currentQuiz.public = !this.currentQuiz.public
+            this.saveQuiz()
+        }
     },
     components: {
-        Link, Modal, DeleteButton, ImageUpload, TimerDropdown
+        Link, Modal, DeleteButton, ImageUpload, TimerDropdown, PrivacyToggle
     }
 
 }
@@ -208,6 +226,7 @@ export default {
                     </p>
                     <input v-else v-model="currentQuiz.title" ref="input" @keyup.enter="saveTitle" @blur="saveTitle" class="bg-gray-700 text-white text-4xl h-10 select-none">
                 </div>
+                <PrivacyToggle @toggle="toggle_privacy" :public_quiz="currentQuiz.public"/>
             </div>
             <div class="flex flex-row">
                 <div class="w-1/6 text-3xl border-r-2 flex flex-col items-center">

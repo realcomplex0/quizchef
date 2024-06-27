@@ -47,7 +47,7 @@ export default {
 
 <template>
 <div>
-    <div v-if="!currentImageUrl" class="h-40 w-80 border-4 border-dotted rounded-xl flex items-center justify-center flex-col" @click="openFileInput">
+    <button v-if="!currentImageUrl" class="h-40 w-80 border-4 border-dotted rounded-xl flex items-center justify-center flex-col" @click="openFileInput">
         <p class="text-2xl text-red-500">Upload your image here </p>
         <p class="text-red-500">Max.file size: 5MB</p>
         <input
@@ -58,7 +58,7 @@ export default {
             @change="handleFileChange"
             accept="image/*"
         />
-    </div>
+    </button>
     <div v-else class="relative select-none">
         <img @click="logger" :src="currentImageUrl" alt="Uploaded Image" class="h-auto max-w-80 outline outline-4 outline-blue-500 rounded select-none"/>
         <DeleteButton @clicked="removeImage" class="absolute top-2 left-2"/>

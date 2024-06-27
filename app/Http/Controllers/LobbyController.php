@@ -21,7 +21,7 @@ class LobbyController extends Controller
 {
     private function uniqueCodeGenerator(){
         $minCode = 1;
-        $maxCode = 100;
+        $maxCode = 1000;
 
         $maxAttempts = 100;
         for($i = 0; $i < $maxAttempts; $i++){
