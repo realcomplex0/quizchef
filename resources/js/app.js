@@ -18,6 +18,11 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue)
         
+        // load localStorage settings
+        for (let i in globalState.settings){
+            let x = localStorage.getItem(i);
+            if (x != null) globalState.settings[i] = x;
+        }
         // set global state
         app.config.globalProperties.$global = globalState;
         app.mount(el);

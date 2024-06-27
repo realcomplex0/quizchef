@@ -1,4 +1,4 @@
-import { reactive, computed } from 'vue'
+import { reactive, computed, onMounted } from 'vue'
 import lv_lang from './Languages/LV.js'
 import en_lang from './Languages/EN.js'
 
@@ -6,7 +6,7 @@ const globalState = reactive({
     // default settings
     settings: {
         language: "en",
-    },
+    }, 
 
     lang: computed(() => {
         switch(globalState.settings.language){
