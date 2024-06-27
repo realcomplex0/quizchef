@@ -23,7 +23,7 @@
                 <!-- TODO: Main Section Main Section :) -->
                 <div class="absolute top-24 w-full h-24 border-b">
                     <div class="absolute w-3/4 h-full">
-                        <p class="text-white text-2xl pl-10 absolute top-1/2" style="transform: translateY(-50%);">Language: </p>
+                        <p class="text-white text-2xl pl-10 absolute top-1/2" style="transform: translateY(-50%);">{{ $global.lang.settingsModal.language }}: </p>
                     </div>
                     <div class="absolute w-1/4 h-full left-3/4 flex justify-evenly items-center border-l">
                         <button @click="$global.settings.language = 'lv';upd()" class="w-2/5 h-16 border-2 text-xl" :class="{ 'btn-gray' : ($global.settings.language != 'lv'), 'btn-green' : ($global.settings.language == 'lv')}">LV</button>

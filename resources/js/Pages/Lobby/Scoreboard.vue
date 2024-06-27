@@ -7,7 +7,8 @@
         <!-- answers -->
         <div class="absolute w-3/4 h-5/6 left-[12.5%] top-[16.66%] overflow-y-auto">
             <div v-for="(entry, index) in results" :key="index" class="">    
-                <p class="text-white text-center text-2xl">{{ entry[1] }} - {{ entry[0] }}</p>
+                <p v-if="entry[2]==0" class="text-center text-2xl text-red-500">{{ entry[1] }} - {{ entry[0] }}</p>
+                <p v-else class="text-center text-2xl text-green-500">{{ entry[1] }} - {{ entry[0] }} (+{{ entry[2] }})</p>
             </div>
         </div>
         
@@ -29,9 +30,10 @@ export default {
     },
     mounted() {
         // process results here
+        console.log(this.scoreboard);
         this.results = [];
         for (const i in this.scoreboard){
-            this.results.push([this.scoreboard[i], i]);
+            this.results.push(this.scoreboard[i]);
         }
         this.results.sort();
         this.results.reverse();

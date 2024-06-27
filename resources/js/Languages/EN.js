@@ -68,6 +68,7 @@ const root = {
     },
     settingsModal: {
         settings: "Settings",
+        language: "Language",
     },
     game: {
         code: "Join with the code",

@@ -68,6 +68,7 @@ const root = {
     },
     settingsModal: {
         settings: "Iestatījumi",
+        language: "Valoda",
     },
     game: {
         code: "Pievienoties ar kodu",

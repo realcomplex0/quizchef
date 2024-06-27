@@ -99,7 +99,11 @@ class LobbyController extends Controller
         $players = $this->getPlayerList($info['lobby']['id']);
         if ($players == null) return -1;
         $ret = [];
-        foreach ($players as $p) $ret[$p['nickname']] = $p['score'];
+        $cnt = 0;
+        foreach ($players as $p) {
+            $ret[$cnt] = [$p['score'], $p['nickname'], $p['score_delta']];
+            $cnt++;
+        }
         return $ret;
     }
     
@@ -211,8 +215,8 @@ class LobbyController extends Controller
         }
 
         if ($info['lobby']['status'] == 0 || $info['lobby']['status'] == 3){
-            Lobby::query()->where('id', $info['lobby']['id'])->update(['status' => 1]);
-            LobbyPlayer::query()->where('lobby_id', $info['lobby']['id'])->update(['has_answered' => 0]);
+            Lobby::query()->where('id', $info['lobby']['id'])->update(['status' => 1, 'question_start_time' => time()]);
+            LobbyPlayer::query()->where('lobby_id', $info['lobby']['id'])->update(['has_answered' => 0, 'score_delta' => 0]);
             $nxt_question = $this->getNextQuestion($code);
             if (gettype($nxt_question) == 'object'){
                 event(new StartGame($data['code'], 1, $nxt_question));
@@ -242,7 +246,12 @@ class LobbyController extends Controller
             if (gettype($question) != 'object') return Redirect::route('/');
             $options = Option::query()->where('question_id', $question['id'])->get();
             if ($options[$ans_ind]['correct'] == 1) {
-                LobbyPlayer::query()->where('id', $player['id'])->increment('score', 1);
+                $mx_score = 1100;
+                $time_passed = time()-$info['lobby']['question_start_time'];
+                $mx_time = $question['timer'];
+                $score = $mx_score - 500*($time_passed/$mx_time);
+                LobbyPlayer::query()->where('id', $player['id'])->increment('score', $score);
+                LobbyPlayer::query()->where('id', $player['id'])->update(['score_delta' => $score]);
             }
             $data = [];
             $data['answer_index'] = $ans_ind;

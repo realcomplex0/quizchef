@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger("quiz_id");
             $table->unsignedBigInteger("status");
             $table->unsignedBigInteger("next_question");
+            $table->unsignedBigInteger("question_start_time")->nullable();
             $table->foreign('quiz_host')
                 ->references('id')
                 ->on('users')

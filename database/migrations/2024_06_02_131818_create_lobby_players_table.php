@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('nickname');
             $table->boolean('is_host');
             $table->bigInteger("score");
+            $table->bigInteger("score_delta")->default(0);
             $table->boolean('has_answered');
             $table->foreign('lobby_id')
                 ->references('id')
