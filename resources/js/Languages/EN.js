@@ -3,6 +3,7 @@ const root = {
         logOut: "Log Out",
         logIn: "Log In",
         register: "Register",
+        language: "Language"
     },
     landingPage: {
         or: "OR",

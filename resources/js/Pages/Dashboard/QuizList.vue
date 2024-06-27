@@ -215,13 +215,14 @@ export default {
                 </div>
 
                 <p class="text-yellow-500 p-4 text-xl">{{ $global.lang.dashboard.favorites }}</p>
-                <div class="overflow-y-auto max-h-[25vh]">
+                <div class="h-auto overflow-y-scroll overflow-x-hidden max-h-[25vh] flex flex-col">
                     <QuizBar @toggle-favorite="onToggleFavorite" @remove-quiz="removeQuizAsk" v-for="quiz in favoriteList" :key="quiz.id" :quiz="quiz"/>
                 </div>
+                
                 <div>
                 <p class="text-yellow-500 p-4 text-xl">{{ $global.lang.dashboard.recents }}</p>
                 </div>
-                <div class="overflow-y-auto max-h-[40vh]">
+                <div class="overflow-y-auto max-h-[35vh]">
                     <QuizBar @toggle-favorite="onToggleFavorite" @remove-quiz="removeQuizAsk" v-for="quiz in recentList" :key="quiz.id" :quiz="quiz"/>
                 </div>
             </div>

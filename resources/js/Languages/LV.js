@@ -3,6 +3,7 @@ const root = {
         logOut: "Iziet",
         logIn: "Ieiet",
         register: "Reģistrēties",
+        language: "Valoda"
     },
     landingPage: {
         or: "VAI",

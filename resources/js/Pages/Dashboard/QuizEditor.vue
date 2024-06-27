@@ -238,7 +238,7 @@ export default {
             </div>
             <div class="flex flex-row">
                 <div class="w-1/6 text-3xl border-r-2 flex flex-col items-center">
-                    <div class="max-h-[70vh] flex flex-col items-center overflow-y-auto overflow-x-hidden">
+                    <div class="h-auto max-h-[60vh] flex flex-col overflow-y-auto overflow-x-hidden">
                         <div v-for="(question, index) in currentQuiz.questions" 
                             :key="index"
                             class="h-20"
@@ -247,11 +247,11 @@ export default {
                             <button v-else class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold m-4 w-16 h-16 border-8 border-orange-500 rounded select-none" @click="handleSelect(index)"> {{ index + 1}}</button>
                         </div>
                     </div>
-                    <div class="h-20">
+                    <div class="h-20 pr-4">
                         <button class="bg-green-500 hover:bg-green-600 text-green-700 font-bold text-5xl m-4 w-16 h-16 rounded select-none" @click="addQuestion"> + </button>
                     </div>
                 </div>
-                <div class="flex flex-col items-center justify-normal w-full max-h-[70vh] overflow-y-auto">
+                <div class="flex flex-col items-center justify-normal w-full max-h-[70vh] overflow-y-scroll m-8">
                     <p v-if="!isEditingQuestionTitle" @click="editQuestionTitle"
                     class="text-white-500 p-4 text-white text-4xl select-none"> 
                         {{currentQuiz.questions[selectedQuestion].title}} 
@@ -289,3 +289,10 @@ export default {
         </div>
     </div>
 </template>
+
+<style>
+.prevent-shift {
+    width: calc(100vw - 100%);
+}
+
+</style>
