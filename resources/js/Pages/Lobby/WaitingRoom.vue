@@ -170,7 +170,7 @@ export default {
                 <p class= "text-white text-2xl"> Title: {{ title }}</p>
                 <p class= "text-red-500 text-2xl"> Code: {{ lobbyCode }}</p>
             </div>
-            <button @click="leaveLobby" class="btn-red text-white border-2 p-3 pb-3">
+            <button @click="leaveLobby" class="btn-red text-white border-2 p-3">
                 <p class="select-none">Leave lobby</p>
             </button>
         </div>

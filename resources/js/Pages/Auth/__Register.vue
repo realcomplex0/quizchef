@@ -1,5 +1,6 @@
 <script>
 import { Link, useForm } from '@inertiajs/vue3';
+import SettingsModal from '@/Components/SettingsModal.vue';
 
 export default {
     data () {
@@ -9,7 +10,8 @@ export default {
                 username: '',
                 password: '',
                 password_confirmation: ''
-            })
+            }),
+            settingsOpen: false,
         }
     },
     methods: {
@@ -18,13 +20,17 @@ export default {
         }
     },
     components: {
-        Link
+        Link, SettingsModal,
     }
 }
 </script>
 
 <template>
-    
+    <SettingsModal :isOpen="settingsOpen" @close="settingsOpen=false"/>
+    <button @click="settingsOpen=true" class="fixed bottom-4 left-4 h-16 w-16 z-10">
+        <img class="select-none" src="../../../../public/assets/img/SettingsCog.png" draggable="false">
+    </button>
+
     <div class="absolute w-full h-full">
         <div class="flex flex-col items-center justify-center p-4 w-full h-full">
             <p class="text-6xl text-white font-bold select-none">
