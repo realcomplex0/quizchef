@@ -47,7 +47,8 @@ const root = {
         addFavorite: "Add to favorites",
         confirm: "Confirm",
         cancel: "Cancel",
-        logout: "Log Out"
+        logout: "Log Out",
+        popular: "Popular quizzes"
     },
     editQuiz: {
         private: "Your Quiz is private",
@@ -71,8 +72,8 @@ const root = {
         settings: "Settings",
         language: "Language",
         sound: "Sound",
-        on: "on",
-        off: "off",
+        on: "On",
+        off: "Off",
     },
     game: {
         code: "Join with the code",

@@ -47,7 +47,8 @@ const root = {
         addFavorite: "Pievienot favorītiem",
         confirm: "Apstiprināt",
         cancel: "Atcelt",
-        logout: "Iziet"
+        logout: "Iziet",
+        popular: 'Populārākās viktorīnas'
     },
     editQuiz: {
         private: "Tava viktorīna ir privāta",
@@ -71,8 +72,8 @@ const root = {
         settings: "Iestatījumi",
         language: "Valoda",
         sound: "Skaņa",
-        on: "ir",
-        off: "nav",
+        on: "Ir",
+        off: "Nav",
     },
     game: {
         code: "Pievienoties ar kodu",

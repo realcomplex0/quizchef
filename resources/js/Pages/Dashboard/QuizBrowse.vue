@@ -77,7 +77,7 @@ export default {
                 </div>
             </div>
             <div class="flex flex-row items-center">
-                <p class="p-5 text-white text-xl">Most popular</p>
+                <p class="p-5 text-white text-xl">{{ $global.lang.dashboard.popular }}</p>
                 <p v-if="!searching && !searchQuery" class="cursor-pointer text-white text-xl " @click="startSearch">🔎 {{ $global.lang.dashboard.search }} </p>
                 <input v-else-if="searching" ref="input" v-model="searchQuery" @keyup.enter="stopSearch" @blur="stopSearch"/>
                 <div v-else class="flex flex-row justify-center items-center">
