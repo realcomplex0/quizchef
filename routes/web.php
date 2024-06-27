@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\QuizListController;
 use App\Http\Controllers\QuizEditorController;
+use App\Http\Controllers\QuizBrowseController;
 use App\Http\Controllers\LobbyController;
 use App\Models\Lobby;
 use Illuminate\Foundation\Application;
@@ -23,6 +24,8 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [QuizListController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/dashboard/browse', [QuizBrowseController::class, 'view'])->name('quiz_browse.view');
 
 Route::patch('/quiz/{quiz}', [QuizListController::class, 'patch'])->name('quiz.patch');
 Route::delete('/quiz/{id}', [QuizListController::class, 'destroy'])->name('quiz.destroy');

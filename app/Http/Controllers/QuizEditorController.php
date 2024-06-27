@@ -23,9 +23,7 @@ class QuizEditorController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-        return Inertia::render('Dashboard/QuizEditor', [
-            'quiz' => $this->load_quiz($id)
-        ]);
+        return Inertia::render('Dashboard/QuizEditor');
     }
     public function update(Request $request, $id = null){
         if(!Auth::check()){

@@ -206,7 +206,11 @@ export default {
                         </Link>
                     </p>
                     <div class="pl-7 text-white text-xl">
-                        <p> {{ $global.lang.dashboard.browse }}</p>
+                        <Link
+                            :href="route('quiz_browse.view')"
+                        >
+                            <p> {{ $global.lang.dashboard.browse }}</p>    
+                        </Link>
                     </div>
                 </div>
 
