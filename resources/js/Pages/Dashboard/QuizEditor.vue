@@ -36,6 +36,7 @@ export default {
             isEditingQuestionTitle: false,
             deleteSelectedQuestionConfirm: false,
             settingsOpen: false,
+            isSaving: false,
         }
     },
     props : {
@@ -101,6 +102,11 @@ export default {
             })
         },
         saveQuiz () {
+            if (this.saving) return;
+            this.saving = true;
+            setTimeout(() => {
+                this.saving = false;
+            }, 1000);
             if (this.currentQuiz.id){
                 router.post(`/quiz/${this.currentQuiz.id}`, this.currentQuiz)
             }
@@ -134,6 +140,7 @@ export default {
             this.deleteSelectedQuestionConfirm = true;
         },
         addQuestion() {
+            if (this.currentQuiz.questions.length >= 10) return;
             this.currentQuiz.questions.push({
                 title: `${this.$global.lang.defaultQuiz.question} ${this.currentQuiz.questions.length + 1}`,
                 timer: 30,
@@ -191,6 +198,13 @@ export default {
         toggle_privacy() {
             this.currentQuiz.public = !this.currentQuiz.public
             this.saveQuiz()
+        },
+        leave() {
+            this.saving = false;
+            this.saveQuiz();
+            setTimeout(() => {
+                router.get('/dashboard');
+            }, 25);
         }
     },
     components: {
@@ -223,11 +237,9 @@ export default {
     <div class="absolute w-full h-full">
         <div class="flex flex-col w-full h-full">
             <div class="p-6 bg-light flex space-between items-center justify-between border-b-2 border-white">
-                <p class="text-5xl text-white font-bold select-none">
-                    <Link :href="route('dashboard')">
-                        QuizChef
-                    </Link>
-                </p>
+                <button class="text-5xl text-white font-bold select-none" @click="leave">
+                    <p>QuizChef</p>
+                </button>
                 <div class="flex flex-row justify-center items-center w-full select-none">
                     <p v-if="!editing" @click="editTitle" class="text-white text-4xl select-none">
                         {{currentQuiz.title}}
@@ -246,7 +258,7 @@ export default {
                             <button class="bg-light hover:bg-gray-400 text-white font-bold border-2 m-4 w-16 h-16 rounded select-none transition-all" style="transition-duration: 250ms;" :class="{ '!bg-white text-light pointer-events-none scale-up2' : selectedQuestion==index}" @click="handleSelect(index)"> {{ index + 1 }}</button>
                         </div>
                     </div>
-                    <div class="h-20">
+                    <div v-if="currentQuiz.questions.length < 10" class="h-20">
                         <button class="btn-green border-2 text-white font-bold text-5xl m-4 w-16 h-16 rounded select-none transition scale-up " @click="addQuestion">
                             <p class="pb-1">+</p>
                         </button>

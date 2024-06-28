@@ -282,6 +282,13 @@ class LobbyController extends Controller
             $data = [];
             $data['question'] = $this->getCurrentQuestion($code);
             if (gettype($data['question']) != 'object') return Redirect::route('/');
+            $lobby_players = $this->getPlayerList($info['lobby']['id']);
+            $correct = [];
+            foreach ($lobby_players as $p){
+                if ($p['score_delta'] > 0) $correct[$p['id']] = 1;
+                else $correct[$p['id']] = 0;
+            }
+            $data['correct'] = $correct;
             event(new UpdateLobby($code, 0, $data));
         }
 

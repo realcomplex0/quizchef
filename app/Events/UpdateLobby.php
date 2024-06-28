@@ -35,6 +35,7 @@ class UpdateLobby implements ShouldBroadcast
                 $this->info['optionsAnswer'][$cnt] = $o['correct'];
                 $cnt++;
             }
+            $this->info['correct'] = $data['correct'];
         } else if ($op == 1){ // update player answered count
             $this->info['answer_count'] = LobbyPlayer::query()->where('lobby_id', $data['lobby_id'])->where('has_answered', 1)->count();
         } else if ($op == 2){ // go to scoreboard

@@ -36,6 +36,8 @@ export default {
             settingsOpen: false,
             checkedStill: 0,
             tmpPlayerList: null,
+            goodSound: false,
+            badSound: false,
         }
     },
     mounted() {
@@ -80,6 +82,8 @@ export default {
                         this.displayPlayers = this.tmpPlayerList;
                         this.tmpPlayerList = null;
                     }
+                    if (event['info']['correct'][this.selected_player] == 1) this.playCorrect();
+                    else this.playWrong();
                     this.status = 2;
                 } else if (event['op'] == 1){ // update answer count
                     this.questionData.answerCount = event['info']['answer_count'];
@@ -140,6 +144,18 @@ export default {
             router.post('/go-scoreboard', {
                 code: this.lobbyCode,
             })
+        },
+        playCorrect(){
+            this.goodSound = true;
+            setTimeout(() => {
+                this.goodSound = false;
+            }, 1000)
+        },
+        playWrong(){
+            this.badSound = true;
+            setTimeout(() => {
+                this.badSound = false;
+            }, 2000)
         }
     },
     watch: {
@@ -180,6 +196,12 @@ export default {
 </script>
 
 <template>
+    <audio v-if="goodSound&&$global.settings.sound==1" autoplay hidden>
+        <source src="../../../../public/assets/sounds/good_beep.mp3" type="audio/mpeg">
+    </audio>
+    <audio v-if="badSound&&$global.settings.sound==1" autoplay hidden>
+        <source src="../../../../public/assets/sounds/bad_beep.mp3" type="audio/mpeg">
+    </audio>
     <div class="absolute w-full h-full">
         <SettingsModal :isOpen="settingsOpen" @close="settingsOpen=false"/>
         <button @click="settingsOpen=true" class="settings-cog">
@@ -193,7 +215,7 @@ export default {
             </p>
             <div class="absolute left-1/2" style="transform:translateX(-50%)">
                 <p class= "text-white text-2xl"> {{ title }}</p>
-                <p class= "text-red-500 text-2xl"> {{$global.lang.game.code}}: {{ lobbyCode }}</p>
+                <p class= "text-green-500 text-2xl"> {{$global.lang.game.code}}: {{ lobbyCode }}</p>
             </div>
             <button @click="leaveLobby" class="btn-red text-white border-2 p-3">
                 <p class="select-none">{{ $global.lang.game.leave_lobby }}</p>
