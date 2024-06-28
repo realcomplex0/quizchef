@@ -30,13 +30,13 @@ export default {
     },
     computed: {
         results(){
-            let res = [[12, 'test1', 5], [11, 'test2', 6], [0, 'test3', 0], [15, 'test4', 7]];
+            let res = [];
             for (const i in this.scoreboard){
                 res.push([this.scoreboard[i][0], this.scoreboard[i][1], this.scoreboard[i][2]]);
             }
-            res.sort();
-            res.reverse();
-            return res;
+            return res.sort((x, y) => {
+                return y[0]-x[0];
+            });
         }
     }
 }
