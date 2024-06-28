@@ -106,7 +106,7 @@ export default {
             this.saving = true;
             setTimeout(() => {
                 this.saving = false;
-            }, 1000);
+            }, 300);
             if (this.currentQuiz.id){
                 router.post(`/quiz/${this.currentQuiz.id}`, this.currentQuiz)
             }
@@ -163,8 +163,9 @@ export default {
             this.saveQuiz()
         },
         deleteOption (idx) {
-            this.currentQuiz.questions[this.selectedQuestion].options.splice(idx, 1)
+            if (this.currentQuiz.questions[this.selectedQuestion].options.length < 2) return;
             if (this.defaultQuestions){
+                this.currentQuiz.questions[this.selectedQuestion].options.splice(idx, 1)
                 this.saveQuiz()
             }
             else{
