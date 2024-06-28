@@ -28,19 +28,16 @@ export default {
             default : false,
         }
     },
-    data() {
-        return {
-            results: null
+    computed: {
+        results(){
+            let res = [[12, 'test1', 5], [11, 'test2', 6], [0, 'test3', 0], [15, 'test4', 7]];
+            for (const i in this.scoreboard){
+                res.push([this.scoreboard[i][0], this.scoreboard[i][1], this.scoreboard[i][2]]);
+            }
+            res.sort();
+            res.reverse();
+            return res;
         }
-    },
-    mounted() {
-        // process results here
-        this.results = [];
-        for (const i in this.scoreboard){
-            this.results.push(this.scoreboard[i]);
-        }
-        this.results.sort();
-        this.results.reverse();
     }
 }
 </script>

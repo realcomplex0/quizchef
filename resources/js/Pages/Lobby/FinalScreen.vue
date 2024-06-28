@@ -39,14 +39,9 @@ export default {
     },
     computed: {
         results(){
-            let res = [];
-            let cnt = 0;
+            let res = [[12, 'test1', 5], [11, 'test2', 6], [0, 'test3', 0], [15, 'test4', 7]];
             for (const i in this.scoreboard){
-                res.push([]);
-                for (const j in this.scoreboard[i]){
-                    res[cnt].push(this.scoreboard[i][j]);
-                }
-                cnt += 1;
+                res.push([this.scoreboard[i][0], this.scoreboard[i][1], this.scoreboard[i][2]]);
             }
             res.sort();
             res.reverse();
